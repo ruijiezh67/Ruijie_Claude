@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "local-qwen-worker": {
+      "command": "E:/The_claude_code/my_claude/Scripts/python.exe",
+      "args": [
+        "E:/The_claude_code/local_mcp/ollama_mcp.py"
+      ]
+    }
+  }
+}

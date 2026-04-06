@@ -1,0 +1,5 @@
+.DS_Store
+
+
+local_mcp/__pycache__/
+*.pyc
