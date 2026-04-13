@@ -189,9 +189,15 @@ def deterministic_score(task: dict, answer: str) -> tuple[int, str]:
         else:
             try:
                 ast.parse(code)
+                score += 1
+                reasons.append("valid python code block")
             except Exception:
                 score -= 3
                 reasons.append("code block failed python parse")
+    else:
+        if len(answer.strip()) >= 500:
+            score += 1
+            reasons.append("long-form coverage bonus")
 
     min_len = 80 if ttype.startswith("coding") else 40
     if len(answer.strip()) < min_len:
