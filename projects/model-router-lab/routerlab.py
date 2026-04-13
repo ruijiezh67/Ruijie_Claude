@@ -18,12 +18,17 @@ DEFAULT_PRICES = {
 }
 
 
-def ollama_generate(model: str, prompt: str, temperature: float = 0.1) -> tuple[str, float]:
+def ollama_generate(
+    model: str,
+    prompt: str,
+    temperature: float = 0.1,
+    num_predict: int = 320,
+) -> tuple[str, float]:
     payload = {
         "model": model,
         "prompt": prompt,
         "stream": False,
-        "options": {"temperature": temperature},
+        "options": {"temperature": temperature, "num_predict": num_predict},
     }
     req = urllib.request.Request(
         f"{OLLAMA_URL}/api/generate",
@@ -32,10 +37,14 @@ def ollama_generate(model: str, prompt: str, temperature: float = 0.1) -> tuple[
         method="POST",
     )
     start = time.time()
-    with urllib.request.urlopen(req, timeout=1200) as resp:
+    with urllib.request.urlopen(req, timeout=900) as resp:
         out = json.loads(resp.read().decode("utf-8"))
     latency = time.time() - start
-    return out.get("response", "").strip(), latency
+    text = (out.get("response", "") or "").strip()
+    if not text:
+        # Some reasoning models may return content in `thinking` with an empty `response`.
+        text = (out.get("thinking", "") or "").strip()
+    return text, latency
 
 
 def ensure_ollama() -> None:
@@ -87,6 +96,38 @@ def percentile(values: list[float], pct: float) -> float:
     return s[idx]
 
 
+def clip_text(text: str, max_chars: int) -> str:
+    if max_chars <= 0 or len(text) <= max_chars:
+        return text
+    return text[:max_chars]
+
+
+def parse_json_fragment(raw: str) -> dict | None:
+    raw = raw.strip()
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw)
+        return data if isinstance(data, dict) else None
+    except Exception:
+        pass
+
+    start = raw.find("{")
+    end = raw.rfind("}")
+    if start >= 0 and end > start:
+        chunk = raw[start : end + 1]
+        try:
+            data = json.loads(chunk)
+            return data if isinstance(data, dict) else None
+        except Exception:
+            return None
+    return None
+
+
+def model_priority(models: list[str], prices: dict[str, float]) -> list[str]:
+    return sorted(models, key=lambda m: prices.get(m, prices.get("default", 1.0)))
+
+
 def load_tasks(path: str) -> list[dict]:
     raw = Path(path).read_text(encoding="utf-8").strip()
     if not raw:
@@ -134,7 +175,10 @@ def deterministic_score(task: dict, answer: str) -> tuple[int, str]:
             if parts and not any(p in answer_lower for p in parts):
                 miss += 1
         if miss:
-            score -= min(4, miss * 2)
+            if ttype.startswith("coding"):
+                score -= min(4, miss * 2)
+            else:
+                score -= min(2, (miss + 1) // 2)
             reasons.append(f"missing expected keywords: {miss}")
 
     if ttype.startswith("coding"):
@@ -149,32 +193,51 @@ def deterministic_score(task: dict, answer: str) -> tuple[int, str]:
                 score -= 3
                 reasons.append("code block failed python parse")
 
-    if len(answer.strip()) < 120:
-        score -= 2
+    min_len = 80 if ttype.startswith("coding") else 40
+    if len(answer.strip()) < min_len:
+        score -= 1
         reasons.append("answer too short")
 
     final = max(1, min(10, score))
     return final, "; ".join(reasons) if reasons else "deterministic checks passed"
 
 
-def judge_answer(judge_model: str, task: dict, answer: str) -> tuple[int, str]:
+def judge_answer(
+    judge_model: str,
+    task: dict,
+    answer: str,
+    judge_max_tokens: int,
+    prompt_max_chars: int,
+) -> tuple[int, str]:
     rubric = task.get("rubric", "Return score from 1 to 10.")
+    short_task = clip_text(task.get("prompt", ""), prompt_max_chars)
+    short_answer = clip_text(answer, prompt_max_chars)
     prompt = (
-        "You are a strict evaluator. Return JSON only with keys score (1-10 int) and reason.\n"
-        f"Task: {task.get('prompt', '')}\n"
+        "Score candidate answer from 1 to 10.\n"
+        "Return EXACTLY this two-line format:\n"
+        "SCORE:<integer 1-10>\n"
+        "REASON:<short reason>\n"
+        f"Task: {short_task}\n"
         f"Expected (optional): {task.get('expected', '')}\n"
         f"Rubric: {rubric}\n"
-        f"Candidate answer: {answer}\n"
-        "Output JSON now."
+        f"Candidate answer: {short_answer}\n"
+        "Output now."
     )
-    raw, _ = ollama_generate(judge_model, prompt, temperature=0.0)
+    raw, _ = ollama_generate(judge_model, prompt, temperature=0.0, num_predict=judge_max_tokens)
     try:
-        data = json.loads(raw)
-        score = int(data.get("score", 1))
-        reason = str(data.get("reason", ""))
+        m = re.search(r"SCORE\s*:\s*(\d{1,2})", raw, re.IGNORECASE)
+        if m:
+            score = int(m.group(1))
+        else:
+            m2 = re.search(r"\b([1-9]|10)\b", raw)
+            if not m2:
+                raise ValueError("no-score")
+            score = int(m2.group(1))
+        rm = re.search(r"REASON\s*:\s*(.*)", raw, re.IGNORECASE)
+        reason = rm.group(1).strip() if rm else raw.strip()[:160]
         return max(1, min(10, score)), reason
     except Exception:
-        return 1, "Judge output parsing failed"
+        return 0, "Judge output parsing failed"
 
 
 def sample_tasks_from_repo(args: argparse.Namespace) -> int:
@@ -265,7 +328,9 @@ def run_benchmark(args: argparse.Namespace) -> int:
 
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     prices = parse_prices(args.prices)
-    baseline_model = models[0]
+    ordered_models = model_priority(models, prices)
+    baseline_model = ordered_models[0]
+    escalation_model = ordered_models[-1]
 
     result = {
         "meta": {
@@ -275,6 +340,10 @@ def run_benchmark(args: argparse.Namespace) -> int:
             "min_score": args.min_score,
             "sla_max_latency_sec": args.sla_max_latency,
             "deterministic_weight": args.det_weight,
+            "prompt_max_chars": args.prompt_max_chars,
+            "answer_max_tokens": args.answer_max_tokens,
+            "judge_max_tokens": args.judge_max_tokens,
+            "auto_escalate": args.auto_escalate,
             "prices_per_1m_tokens": prices,
             "timestamp": int(time.time()),
         },
@@ -294,12 +363,63 @@ def run_benchmark(args: argparse.Namespace) -> int:
         ttype = task.get("type", "general")
         task_out = {"id": task.get("id"), "type": ttype, "runs": []}
 
-        for model in models:
-            answer, latency = ollama_generate(model, task.get("prompt", ""), temperature=args.temperature)
-            llm_score, llm_reason = judge_answer(args.judge_model, task, answer)
+        clipped_prompt = clip_text(task.get("prompt", ""), args.prompt_max_chars)
+        for model in ordered_models:
+            answer, latency = ollama_generate(
+                model,
+                clipped_prompt,
+                temperature=args.temperature,
+                num_predict=args.answer_max_tokens,
+            )
+            if not answer.strip():
+                answer, retry_latency = ollama_generate(
+                    model,
+                    task.get("prompt", ""),
+                    temperature=max(0.05, args.temperature),
+                    num_predict=max(320, args.answer_max_tokens),
+                )
+                latency += retry_latency
+            llm_score, llm_reason = judge_answer(
+                args.judge_model,
+                task,
+                answer,
+                judge_max_tokens=args.judge_max_tokens,
+                prompt_max_chars=args.prompt_max_chars,
+            )
             det_score, det_reason = deterministic_score(task, answer)
+            if llm_score < 1:
+                llm_score = det_score
             final_score = int(round(llm_score * (1 - args.det_weight) + det_score * args.det_weight))
             final_score = max(1, min(10, final_score))
+
+            escalated = False
+            if args.auto_escalate and final_score < args.min_score and model != escalation_model:
+                esc_answer, esc_latency = ollama_generate(
+                    escalation_model,
+                    clipped_prompt,
+                    temperature=args.temperature,
+                    num_predict=args.answer_max_tokens,
+                )
+                esc_llm, esc_reason = judge_answer(
+                    args.judge_model,
+                    task,
+                    esc_answer,
+                    judge_max_tokens=args.judge_max_tokens,
+                    prompt_max_chars=args.prompt_max_chars,
+                )
+                esc_det, esc_det_reason = deterministic_score(task, esc_answer)
+                esc_final = int(round(esc_llm * (1 - args.det_weight) + esc_det * args.det_weight))
+                esc_final = max(1, min(10, esc_final))
+                if esc_final >= final_score:
+                    answer = esc_answer
+                    latency += esc_latency
+                    llm_score = esc_llm
+                    llm_reason = esc_reason
+                    det_score = esc_det
+                    det_reason = esc_det_reason
+                    final_score = esc_final
+                    model = escalation_model
+                    escalated = True
 
             token_estimate = approx_tokens(task.get("prompt", "")) + approx_tokens(answer)
             cost = estimate_cost(token_estimate, prices.get(model, prices.get("default", 0.2)))
@@ -316,6 +436,7 @@ def run_benchmark(args: argparse.Namespace) -> int:
                 "approx_tokens": token_estimate,
                 "estimated_cost": round(cost, 8),
                 "estimated_saving_vs_baseline": round(max(0.0, baseline_cost - cost), 8),
+                "escalated": escalated,
                 "answer": answer,
             }
             task_out["runs"].append(run)
@@ -431,6 +552,69 @@ def route_task(args: argparse.Namespace) -> int:
     return 0
 
 
+def simulate_production(args: argparse.Namespace) -> int:
+    policy = json.loads(Path(args.policy).read_text(encoding="utf-8"))
+    report = json.loads(Path(args.report).read_text(encoding="utf-8"))
+    tasks = report.get("tasks", [])
+    if not tasks:
+        print("No tasks in report")
+        return 2
+
+    default_model = policy.get("default_model", "qwen3:8b")
+    retry_model = policy.get("retry_policy", {}).get("retry_model", default_model)
+    retry_threshold = int(policy.get("retry_policy", {}).get("retry_if_score_below", 7))
+
+    routed = 0
+    retried = 0
+    avg_scores = []
+    latencies = []
+
+    for task in tasks:
+        ttype = task.get("type", "general")
+        model = policy.get("routing_rules", {}).get(ttype, default_model)
+        runs = [r for r in task.get("runs", []) if r.get("model") == model]
+        if not runs:
+            runs = [r for r in task.get("runs", []) if r.get("model") == default_model]
+        if not runs:
+            continue
+        run = runs[0]
+        routed += 1
+        score = run.get("score", 1)
+        latency = run.get("latency_sec", 0)
+
+        if score < retry_threshold and retry_model != model:
+            retry_runs = [r for r in task.get("runs", []) if r.get("model") == retry_model]
+            if retry_runs:
+                rr = retry_runs[0]
+                if rr.get("score", 1) >= score:
+                    score = rr.get("score", score)
+                    latency += rr.get("latency_sec", 0)
+                    retried += 1
+
+        avg_scores.append(score)
+        latencies.append(latency)
+
+    sim = {
+        "routed_tasks": routed,
+        "retried_tasks": retried,
+        "avg_score": round(sum(avg_scores) / len(avg_scores), 3) if avg_scores else 0,
+        "p95_latency_sec": round(percentile(latencies, 95), 3) if latencies else 0,
+    }
+    sim["verdict"] = (
+        "good"
+        if sim["avg_score"] >= 7 and sim["p95_latency_sec"] <= 45
+        else "needs-optimization"
+    )
+    write_json(args.out, sim)
+    print(f"Saved production simulation: {args.out}")
+    print(
+        "Simulation verdict: "
+        + sim["verdict"]
+        + f", avg_score={sim['avg_score']}, p95={sim['p95_latency_sec']}s"
+    )
+    return 0
+
+
 def render_report(args: argparse.Namespace) -> int:
     report = json.loads(Path(args.report).read_text(encoding="utf-8"))
     summary = report.get("summary", {})
@@ -478,6 +662,20 @@ def render_report(args: argparse.Namespace) -> int:
                 "</tr>"
             )
 
+    best_model = None
+    if summary:
+        best_model = max(summary.items(), key=lambda kv: kv[1].get("avg_score", 0))[0]
+
+    verdict = "Insufficient data"
+    if best_model:
+        m = summary[best_model]
+        if m.get("pass_rate", 0) >= 0.9 and m.get("p95_latency_sec", 9999) <= 45:
+            verdict = "Launch-ready for pilot"
+        elif m.get("pass_rate", 0) >= 0.75:
+            verdict = "Usable, optimize latency before wider launch"
+        else:
+            verdict = "Needs more tuning before launch"
+
     html = f"""<!doctype html>
 <html lang='en'>
 <head>
@@ -500,6 +698,7 @@ def render_report(args: argparse.Namespace) -> int:
   <div class='wrap'>
     <h1>Model Router Lab</h1>
     <p>R1 report: dual scoring, SLA routing, and cost-aware recommendations.</p>
+        <div class='routing'><h3>Business Verdict</h3><p>{escape(verdict)}</p></div>
     <div class='grid'>{''.join(cards)}</div>
     <div class='routing'>
       <h3>Recommended Routing by Task Type</h3>
@@ -558,6 +757,10 @@ def main() -> int:
     p_bench.add_argument("--min-score", type=int, default=7)
     p_bench.add_argument("--det-weight", type=float, default=0.4, help="Weight for deterministic score in final score")
     p_bench.add_argument("--sla-max-latency", type=float, default=45.0, help="SLA max average latency per task type")
+    p_bench.add_argument("--prompt-max-chars", type=int, default=1200)
+    p_bench.add_argument("--answer-max-tokens", type=int, default=320)
+    p_bench.add_argument("--judge-max-tokens", type=int, default=120)
+    p_bench.add_argument("--auto-escalate", action="store_true")
     p_bench.add_argument("--prices", default="", help="model=price_per_1m,model2=price")
     p_bench.add_argument("--out", default="projects/model-router-lab/outputs/benchmark.json")
     p_bench.set_defaults(func=run_benchmark)
@@ -578,6 +781,12 @@ def main() -> int:
     p_render.add_argument("--report", required=True)
     p_render.add_argument("--out", default="projects/model-router-lab/outputs/report.html")
     p_render.set_defaults(func=render_report)
+
+    p_sim = sub.add_parser("simulate-production")
+    p_sim.add_argument("--report", required=True)
+    p_sim.add_argument("--policy", required=True)
+    p_sim.add_argument("--out", default="projects/model-router-lab/outputs/simulation.json")
+    p_sim.set_defaults(func=simulate_production)
 
     args = parser.parse_args()
     return args.func(args)
