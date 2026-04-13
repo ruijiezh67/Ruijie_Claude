@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "source_report": "projects/model-router-lab/outputs/benchmark_sample_8b.json",
+    "created_at": 1776101242,
+    "min_score": 7.0
+  },
+  "default_model": "qwen3:8b",
+  "routing_rules": {
+    "coding_light": "qwen3:8b",
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  },
+  "model_stats": {
+    "qwen3:8b": {
+      "avg_score": 10.0,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 43.068,
+      "total_estimated_cost": 0.000246
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/sample_tasks.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776101014
+  },
+  "tasks": [
+    {
+      "id": "t1",
+      "type": "coding_light",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "judge_reason": "The candidate's solution correctly implements the task using a set to track seen elements and a list to preserve order. The code is concise, efficient (O(n) time complexity), and handles all edge cases. The explanation is thorough and aligns with the expected approach.",
+          "latency_sec": 34.065,
+          "approx_tokens": 565,
+          "estimated_cost": 5.65e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "Here's a well-structured and efficient Python function that removes duplicates from a list while preserving the original order of elements:\n\n```python\ndef remove_duplicates(input_list):\n    \"\"\"\n    Removes duplicates from a list while preserving the order of elements.\n\n    Parameters:\n    input_list (list): The list from which duplicates are to be removed.\n\n    Returns:\n    list: A new list with duplicates removed, preserving the original order.\n    \"\"\"\n    seen = set()\n    result = []\n    for item in input_list:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n```\n\n---\n\n### \u2705 **Explanation:**\n\n- **`seen = set()`**: A set is used to track elements that have already been added to the result list. Sets are ideal for this because they automatically handle uniqueness and provide O(1) average time complexity for membership checks.\n  \n- **`result = []`**: This list will store the final result with unique elements in their original order.\n\n- **Loop through `input_list`**: For each element:\n  - If it's not in `seen`, it's added to both `seen` and `result`.\n  - If it's already in `seen`, it's skipped.\n\n---\n\n### \ud83d\udccc **Key Features:**\n\n- **Preserves Order**: The first occurrence of each element is retained, and subsequent duplicates are ignored.\n- **Efficient**: The algorithm runs in **O(n)** time complexity, where `n` is the length of the input list.\n- **Handles Hashable Elements**: The function works with any hashable elements (e.g., integers, strings, tuples), but not unhashable types like lists or dictionaries.\n\n---\n\n### \ud83e\uddea **Example Usage:**\n\n```python\nprint(remove_duplicates([1, 2, 2, 3, 1]))  # Output: [1, 2, 3]\nprint(remove_duplicates(['a', 'b', 'a', 'c']))  # Output: ['a', 'b', 'c']\nprint(remove_duplicates([10, 20, 10, 30, 20, 40]))  # Output: [10, 20, 30, 40]\n```\n\n---\n\n### \ud83d\udccc **Edge Cases:**\n\n- **Empty List**: `remove_duplicates([])` \u2192 `[]`\n- **All Elements the Same**: `remove_duplicates([5, 5, 5])` \u2192 `[5]`\n- **Mixed Types**: `remove_duplicates([1, 'a', 1, 'a'])` \u2192 `[1, 'a']`\n\n---\n\nThis function is a clean and efficient way to deduplicate a list while maintaining the original order of elements."
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "judge_reason": "The answer provides a correct and technically deep explanation of the debounce algorithm using a timer-based approach. It accurately analyzes time and space complexity (O(1) per event, O(1) space), addresses key considerations like timer overhead, and acknowledges scalability beyond single streams. The pseudocode is clear, and the explanation aligns with standard debouncing principles without unnecessary simplifications.",
+          "latency_sec": 79.342,
+          "approx_tokens": 674,
+          "estimated_cost": 6.74e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "To debounce file change events, we design an algorithm that ensures a processing function is only invoked after a specified cooldown period (debounce duration) has elapsed since the last event. This prevents excessive processing of rapid, consecutive events.\n\n---\n\n### **Algorithm Design**\n\n**Key Idea**:  \nUse a timer to delay the execution of the processing function. If a new event occurs before the timer expires, it resets the timer. Only after the cooldown period elapses (no new events) does the processing occur.\n\n**Steps**:\n1. **Initialize a timer** (e.g., `debounceTimer`) to `null`.\n2. **On each file change event**:\n   - **Cancel the existing timer** (if any).\n   - **Set a new timer** for the debounce duration.\n3. **When the timer expires**:\n   - **Process the event** (e.g., update a cache, log changes, etc.).\n\n**Example (Pseudocode)**:\n```python\ndef debounce_file_change(event, debounce_duration):\n    global debounce_timer\n    if debounce_timer is not None:\n        cancel(debounce_timer)\n    debounce_timer = set_timer(debounce_duration, lambda: process_event(event))\n```\n\n---\n\n### **Complexity Analysis**\n\n#### **Time Complexity**\n- **Per Event**:  \n  Each event triggers a timer reset (O(1) operation). The actual processing of the event (e.g., reading the file) is considered separate and depends on the task.  \n  **Overall**: O(1) per event for the debouncing logic.\n\n- **Total for m Events**:  \n  If `m` events occur, the debouncing logic processes each in O(1) time. However, the **processing function** (e.g., reading the file) may have higher complexity (e.g., O(k) for file size `k`).\n\n#### **Space Complexity**\n- **Storage**:  \n  Only a single timer reference is needed (O(1) space).  \n  **Overall**: O(1) space for the debouncing logic.\n\n---\n\n### **Key Considerations**\n- **Efficiency**:  \n  The algorithm ensures that the processing function is called **once per burst of events**, reducing redundant operations.\n- **Timer Overhead**:  \n  The timer management (e.g., `set_timer`, `cancel`) is typically O(1) in systems with efficient scheduling (e.g., JavaScript `setTimeout`, Python `threading.Timer`).\n- **Scalability**:  \n  For multiple independent file streams, the space complexity becomes O(n), where `n` is the number of streams, but this is beyond the scope of a single file change event.\n\n---\n\n### **Conclusion**\nThe debouncing algorithm efficiently handles file change events with **O(1) time complexity per event** and **O(1) space complexity** for a single stream. It ensures that processing occurs only after a cooldown period, optimizing resource usage for frequent, rapid events."
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "judge_reason": "The answer comprehensively covers cost reduction, data locality, and compliance. It clearly explains how local-first AI reduces expenses through lower data transfer, reduced cloud dependency, and energy efficiency. Privacy improvements are detailed with data minimization, cross-border compliance (GDPR), and user control. Structure and clarity are excellent, with concise, actionable points.",
+          "latency_sec": 24.902,
+          "approx_tokens": 332,
+          "estimated_cost": 3.32e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "Local-first AI tooling reduces costs and improves privacy by addressing key limitations of cloud-based systems. Here's a concise summary:\n\n### **Cost Reduction**  \n1. **Lower Data Transfer Costs**: Processing data locally eliminates the need for expensive cloud storage and bandwidth, reducing expenses tied to data transfer and API calls.  \n2. **Reduced Dependency on Cloud Providers**: Minimizing reliance on third-party cloud services cuts subscription fees and long-term infrastructure costs.  \n3. **Energy Efficiency**: Local processing can be more energy-efficient than cloud operations, especially for edge devices or on-premises systems.  \n\n### **Privacy Improvements**  \n1. **Data Minimization**: Sensitive data is processed locally, reducing the amount of data stored or transmitted, which lowers exposure to breaches.  \n2. **No Cross-Border Data Risks**: Local processing avoids compliance issues with data sovereignty laws (e.g., GDPR) by keeping data within the user\u2019s jurisdiction.  \n3. **Control Over Data**: Users retain ownership of their data, preventing unauthorized access or misuse by cloud providers.  \n\nBy prioritizing local computation, organizations and individuals can achieve cost savings while enhancing data security and autonomy."
+        }
+      ]
+    },
+    {
+      "id": "t4",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "judge_reason": "The answer provides a clear, practical 5-step plan with logical sequencing from MVP development to post-launch maintenance. Each step includes actionable items (e.g., licensing, CI/CD setup, community engagement) and explicitly addresses feedback loops. The structure aligns with the rubric's emphasis on practicality and ordering, ensuring a realistic path to open-source tool success.",
+          "latency_sec": 33.964,
+          "approx_tokens": 892,
+          "estimated_cost": 8.92e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "Here\u2019s a **5-step launch plan** for an open-source developer tool, designed to maximize visibility, community engagement, and long-term success:\n\n---\n\n### **Step 1: Plan and Prepare**  \n- **Define the tool\u2019s purpose**: Clearly articulate the problem it solves and its unique value proposition.  \n- **Choose an open-source license**: Select a license (e.g., MIT, Apache, GPL) that aligns with your goals (permissive vs. restrictive).  \n- **Set up infrastructure**: Create a GitHub/GitLab repository, version control (Git), and a CI/CD pipeline (e.g., GitHub Actions).  \n- **Build a roadmap**: Outline core features, milestones, and future updates to guide development and community expectations.  \n- **Document basics**: Write a concise README with installation instructions, usage examples, and contribution guidelines.  \n\n---\n\n### **Step 2: Develop and Test**  \n- **Build the MVP**: Focus on core functionality to ensure the tool is functional and user-friendly.  \n- **Implement testing**: Add unit/integration tests and automate testing via CI/CD to ensure reliability.  \n- **Create documentation**: Write tutorials, API references, and examples to lower the barrier for new users.  \n- **Set up a demo**: Prepare a simple, reproducible example (e.g., a GitHub repo with a \"Try it\" button) to showcase the tool\u2019s value.  \n- **Secure initial feedback**: Share early versions with trusted users or communities to refine the tool before launch.  \n\n---\n\n### **Step 3: Engage the Community**  \n- **Announce the tool**: Share the launch on platforms like Twitter, Reddit, Dev.to, or Hacker News. Use hashtags like #OpenSource or #DeveloperTools.  \n- **Join developer communities**: Post in forums (e.g., Stack Overflow, Discord servers, or Slack channels) to gather feedback and attract early adopters.  \n- **Create a GitHub Discussions section**: Encourage users to ask questions, share ideas, and report issues.  \n- **Invite contributors**: Highlight how others can contribute (code, docs, translations) and set up a contribution guide.  \n- **Build a mailing list**: Use tools like Mailchimp or Discord to keep users informed about updates and roadmap changes.  \n\n---\n\n### **Step 4: Launch and Promote**  \n- **Write a launch blog post**: Publish a detailed article on your website or a tech blog explaining the tool\u2019s purpose, features, and impact.  \n- **Create a changelog**: Document the release notes and highlight key improvements.  \n- **Host a launch event (optional)**: Organize a webinar, AMA (Ask Me Anything), or live demo to engage the community.  \n- **Leverage social media**: Share teasers, screenshots, and user testimonials to build buzz.  \n- **Collaborate with influencers**: Partner with developers or open-source advocates to review or promote the tool.  \n\n---\n\n### **Step 5: Maintain and Grow**  \n- **Monitor feedback**: Use GitHub Issues, Discord, or surveys to track user needs and prioritize updates.  \n- **Fix bugs and add features**: Regularly release updates to improve the tool and address community requests.  \n- **Maintain documentation**: Keep tutorials, examples, and guides up-to-date as the tool evolves.  \n- **Recognize contributors**: Acknowledge contributors in release notes or through a contributor wall to foster loyalty.  \n- **Plan for the future**: Share roadmap updates and gather input to keep the project aligned with user needs.  \n\n---\n\nBy following this plan, you\u2019ll position your tool for a successful launch, foster a loyal community, and ensure long-term adoption. \ud83d\ude80"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 10.0,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 43.068,
+      "total_estimated_cost": 0.000246
+    }
+  },
+  "recommended_routing": {
+    "coding_light": "qwen3:8b",
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

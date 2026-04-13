@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/repo_tasks.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.4,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776103293
+  },
+  "tasks": [
+    {
+      "id": "repo-1",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "The improvement is highly actionable with precise patch details (adding os import, environment variable replacement, and error message update). The code change is correct and maintains functionality while enhancing configurability. The technical depth is excellent, addressing maintainability, flexibility, and user guidance through the environment variable approach. The rationale clearly explains the benefits and aligns with best practices for deployable systems.",
+          "deterministic_reason": "deterministic checks passed",
+          "latency_sec": 51.878,
+          "approx_tokens": 898,
+          "estimated_cost": 8.98e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "**Proposed Improvement:**  \nMake the Ollama server URL configurable via an environment variable to enhance flexibility and avoid hardcoding.\n\n---\n\n**Patch Details:**  \n1. **Add `os` import** to access environment variables.  \n2. **Replace hardcoded URL** with a dynamic value from `OLLAMA_HOST` environment variable.  \n3. **Update error message** to guide users on configuring the environment variable.  \n\n---\n\n**Modified Code Snippet:**  \n```python\nimport os\nimport json\nimport urllib.error\nimport urllib.request\n\nfrom mcp.server.fastmcp import FastMCP\n\nmcp = FastMCP(\"local-qwen-worker\")\n\ndef _call_ollama(prompt: str, model: str, temperature: float) -> str:\n    # Use environment variable for Ollama URL, default to localhost\n    ollama_url = os.environ.get(\"OLLAMA_HOST\", \"http://127.0.0.1:11434/api/generate\")\n    \n    payload = {\n        \"model\": model,\n        \"prompt\": prompt,\n        \"stream\": False,\n        \"options\": {\n            \"temperature\": temperature,\n        },\n    }\n\n    req = urllib.request.Request(\n        ollama_url,\n        data=json.dumps(payload).encode(\"utf-8\"),\n        headers={\"Content-Type\": \"application/json\"},\n        method=\"POST\",\n    )\n\n    try:\n        with urllib.request.urlopen(req, timeout=300) as resp:\n            data = json.loads(resp.read().decode(\"utf-8\"))\n    except urllib.error.URLError as e:\n        raise RuntimeError(\n            \"Cannot reach Ollama. Ensure Ollama is running and set OLLAMA_HOST (e.g., http://localhost:11434/api/generate).\"\n        ) from e\n\n    text = data.get(\"response\", \"\")\n    if not text:\n        raise RuntimeError(\"Ollama returned an empty response.\")\n    return text\n```\n\n---\n\n**Key Benefits:**  \n- **Flexibility:** Users can connect to remote Ollama instances by setting `OLLAMA_HOST`.  \n- **Maintainability:** Avoids hardcoded dependencies, reducing configuration friction.  \n- **Clarity:** Error message now explicitly guides users to configure the environment variable.  \n\nThis change aligns with best practices for configurable and deployable systems."
+        }
+      ]
+    },
+    {
+      "id": "gen-2",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 6,
+          "judge_reason": "The answer provides comprehensive coverage of technical risks for local-first AI products, including reliability (model accuracy, performance), compliance (data residency, legal risks), and practical insights into synchronization, security, and scalability. However, it lacks explicit mention of 'evaluation bias' and 'support cost' as expected, which slightly reduces coverage. The depth of practical challenges and mitigation strategies is strong.",
+          "deterministic_reason": "missing expected keywords: 2",
+          "latency_sec": 45.357,
+          "approx_tokens": 1197,
+          "estimated_cost": 0.0001197,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "When shipping a **local-first AI coding product** (e.g., an AI tool that runs primarily on the user's device rather than relying on cloud infrastructure), several **technical risks** must be carefully managed. Here's a structured summary of key risks:\n\n---\n\n### **1. Data Synchronization & Consistency**\n- **Risk**: Ensuring seamless synchronization between local and cloud data (if hybrid) without conflicts or data loss.\n- **Challenges**: \n  - Handling version conflicts (e.g., local edits vs. cloud updates).\n  - Ensuring data integrity during offline use and reconnection.\n  - Managing user expectations for real-time collaboration.\n\n---\n\n### **2. Performance & Resource Constraints**\n- **Risk**: Local devices may lack the computational power or memory to run complex AI models efficiently.\n- **Challenges**: \n  - Battery drain from resource-heavy models (e.g., large neural networks).\n  - Latency in real-time features (e.g., code suggestions, debugging).\n  - Compatibility with low-end hardware (e.g., older devices, mobile phones).\n\n---\n\n### **3. Security & Privacy Risks**\n- **Risk**: Local-first models may expose sensitive data (e.g., code, user behavior) if the device is compromised.\n- **Challenges**: \n  - Securing local storage (e.g., encryption, access controls).\n  - Ensuring model training data doesn\u2019t include sensitive user information.\n  - Mitigating risks of local data breaches (e.g., physical device theft).\n\n---\n\n### **4. Model Accuracy & Reliability**\n- **Risk**: Local models may lack the training data or computational power to match cloud-based AI systems.\n- **Challenges**: \n  - Reduced accuracy due to limited data or model size.\n  - Drift in model performance over time without retraining.\n  - Handling edge cases (e.g., rare code patterns, ambiguous inputs).\n\n---\n\n### **5. Integration with Existing Tools**\n- **Risk**: Difficulty integrating the local-first AI with existing development workflows (e.g., IDEs, version control systems).\n- **Challenges**: \n  - API limitations or lack of standardization for local AI tools.\n  - Compatibility issues with third-party plugins or extensions.\n  - Ensuring seamless user experience across platforms (e.g., desktop vs. mobile).\n\n---\n\n### **6. Scalability & Maintenance**\n- **Risk**: Scaling a local-first product to support large teams or distributed users.\n- **Challenges**: \n  - Managing model updates without disrupting user workflows.\n  - Ensuring consistent model versions across devices.\n  - Handling large datasets locally (e.g., storage limits, data fragmentation).\n\n---\n\n### **7. User Experience & Trust**\n- **Risk**: Users may distrust opaque AI decisions or perceive the tool as unreliable.\n- **Challenges**: \n  - Balancing performance with usability (e.g., slow responses vs. accurate suggestions).\n  - Ensuring transparency in how the AI makes decisions (e.g., explainability).\n  - Managing user expectations for offline functionality.\n\n---\n\n### **8. Compliance & Legal Risks**\n- **Risk**: Non-compliance with data residency, privacy, or security regulations (e.g., GDPR, CCPA).\n- **Challenges**: \n  - Ensuring local data storage meets regional legal requirements.\n  - Handling user consent for data processing (e.g., local vs. cloud data).\n  - Managing cross-border data transfers if hybrid models are used.\n\n---\n\n### **9. Model Training & Deployment**\n- **Risk**: Training models locally may require significant storage and computational resources.\n- **Challenges**: \n  - Efficiently compressing models for local deployment without sacrificing performance.\n  - Ensuring model retraining is feasible without retraining the entire dataset.\n  - Managing model drift when local data is limited or outdated.\n\n---\n\n### **10. Edge Case Handling**\n- **Risk**: Unpredictable behavior in edge cases (e.g., network failures, device-specific quirks).\n- **Challenges**: \n  - Ensuring robust error handling for offline scenarios.\n  - Supporting diverse device configurations (e.g., different OS versions, hardware specs).\n  - Debugging and monitoring local model behavior without cloud logs.\n\n---\n\n### **Mitigation Strategies (Overview)**\n- **Hybrid architecture**: Balance local and cloud capabilities for critical tasks.\n- **Efficient model optimization**: Use quantization, pruning, or lightweight frameworks (e.g., TensorFlow Lite).\n- **Robust synchronization protocols**: Implement conflict resolution and versioning.\n- **Security-first design**: Encrypt local data, use secure storage, and enforce access controls.\n- **User education**: Clearly communicate trade-offs (e.g., offline vs. cloud features).\n\nBy addressing these risks proactively, teams can build a reliable, secure, and user-friendly local-first AI coding product."
+        }
+      ]
+    },
+    {
+      "id": "gen-3",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 8,
+          "deterministic_score": 6,
+          "judge_reason": "The plan is practical with clear daily goals and actionable steps (e.g., optimized README, social media outreach, giveaways). Sequencing builds momentum from setup to community engagement. However, some steps (e.g., giveaway on Day 2) could be delayed for better pacing, and the GitHub Sponsors page feels tangential to the star-gathering focus. Includes demos, docs, channels, feedback loops, and release cadence as expected.",
+          "deterministic_reason": "missing expected keywords: 2",
+          "latency_sec": 61.674,
+          "approx_tokens": 1437,
+          "estimated_cost": 0.0001437,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "Here's a **7-day launch plan** to get your devtool to **100 GitHub stars** by leveraging visibility, community engagement, and value-driven promotion. This plan balances strategy, outreach, and execution to maximize early adoption.\n\n---\n\n### **Day 1: Setup & Foundation**\n**Goal:** Prepare your repo for launch and build initial buzz.  \n1. **Optimize Your Repo**  \n   - Write a **clear, concise README** with:  \n     - Problem statement (what pain points does your tool solve?).  \n     - Key features (highlight 3-5 unique benefits).  \n     - Installation steps (quick and easy).  \n     - A **call-to-action** (e.g., \"Star this repo to join the community!\").  \n   - Add a **GitHub Page** or **blog post** explaining your tool\u2019s purpose.  \n   - Include a **demo video** (e.g., on YouTube or GitHub) to showcase value.  \n\n2. **Launch on Social Media**  \n   - Post on **Twitter/X** and **LinkedIn**:  \n     - \"Excited to share [DevTool Name]! \ud83d\ude80 A [brief description] to help devs [solve a problem]. Star this repo to join the community!\"  \n     - Tag relevant communities (e.g., #DevTools, #OpenSource).  \n   - Share a **tweet thread** explaining your tool\u2019s value proposition.  \n\n3. **Engage Early Adopters**  \n   - Reach out to 5-10 developers in your niche (via LinkedIn or Twitter) for feedback.  \n   - Ask for a **quick review** or \"star if you\u2019re interested in this tool.\"  \n\n---\n\n### **Day 2: Early Engagement & Incentives**\n**Goal:** Encourage early stars and build momentum.  \n1. **Create a GitHub Discussion**  \n   - Post a question like:  \n     *\"What\u2019s your biggest pain point when [specific task]? Let\u2019s discuss how [DevTool Name] can help!\"*  \n   - Invite users to share their use cases.  \n\n2. **Launch a Giveaway**  \n   - Offer a **free tier** or a **limited-time feature** for the first 50 stars.  \n   - Example: *\"Star this repo by EOD and get early access to [Feature X]!\"*  \n\n3. **Join Dev Communities**  \n   - Post in **Reddit** (e.g., r/programming, r/learnpython) and **Discord servers** (e.g., Dev.to, Open Source communities).  \n   - Example: *\"Looking for feedback on [DevTool Name]\u2014star the repo if you\u2019re interested!\"*  \n\n---\n\n### **Day 3: Collaborate & Partner**  \n**Goal:** Leverage partnerships to expand reach.  \n1. **Reach Out to Influencers**  \n   - Send personalized messages to 3-5 developers/blogs in your niche (e.g., Dev.to writers, YouTube creators).  \n   - Example: *\"Hi [Name], I\u2019m building [DevTool Name] to help devs with [problem]. Would you consider a review or tutorial?\"*  \n\n2. **Submit to GitHub Communities**  \n   - Add your repo to **GitHub\u2019s trending repositories** or **community pages** (e.g., GitHub Explore, DevTools category).  \n   - Submit to **GitHub\u2019s \"Awesome\" lists** (if relevant).  \n\n3. **Create a GitHub Sponsors Page** (optional)  \n   - If you\u2019re open to funding, promote it to attract early supporters.  \n\n---\n\n### **Day 4: Optimize for Visibility**  \n**Goal:** Maximize discoverability and engagement.  \n1. **Refine Your README**  \n   - Add a **\"Why This Tool?\"** section with a clear value proposition.  \n   - Include a **\"Roadmap\"** to show future plans (e.g., \"Next: Add support for X\").  \n\n2. **Engage with Starred Users**  \n   - Thank users who starred the repo in a tweet or comment.  \n   - Example: *\"Thanks to [User] for starring! \ud83d\ude4c Let\u2019s keep this project growing!\"*  \n\n3. **Use GitHub Search**  \n   - Add relevant keywords to your repo (e.g., \"devtool\", \"automation\", \"CLI\").  \n   - Use GitHub\u2019s **\"Explore\"** feature to target niche audiences.  \n\n---\n\n### **Day 5: Launch Campaign**  \n**Goal:** Drive mass visibility and conversions.  \n1. **Create a Launch Video**  \n   - Film a 1-2 minute demo video (e.g., on TikTok, YouTube, or Twitter Spaces).  \n   - Example: *\"Meet [DevTool Name]\u2014the tool that [solves a problem] in 30 seconds!\"*  \n\n2. **Run a Twitter/X Campaign**  \n   - Post a **thread** explaining your tool\u2019s value, use cases, and why it\u2019s worth starring.  \n   - Use hashtags like #DevTools, #OpenSource, and #Tech.  \n\n3. **Collaborate with a Dev Blog**  \n   - Pitch a guest post or tutorial to a popular dev blog (e.g., Dev.to, CSS-Tricks).  \n   - Example: *\"I\u2019m launching [DevTool Name]\u2014here\u2019s how it helps devs [solve a problem].\"*  \n\n---\n\n### **Day 6: Community Building**  \n**Goal:** Foster a loyal community around your tool.  \n1. **Create a Discord/Slack Server**  \n   - Invite early adopters to discuss features, share feedback, and collaborate.  \n\n2. **Post User Stories**  \n   - Share testimonials or use cases from early users (e.g., *\"User X saved 2 hours/day with [DevTool Name]!\"*).  \n\n3. **Host a Twitter Space**  \n   - Discuss your tool\u2019s features, answer questions, and invite users to star the repo.  \n\n---\n\n### **Day 7: Follow-Up & Growth**  \n**Goal:** Sustain momentum and convert stars into long-term users.  \n1. **Analyze Metrics**  \n   - Track stars, forks, and engagement. Use GitHub Insights or social media analytics.  \n\n2. **Reach Out to Starred Users**  \n   - Follow up with users who starred but didn\u2019t engage (e.g., *\"Hi [User], thanks for starring! Want to join our Discord for updates?\"*).  \n\n3. **Plan for the Future**  \n   - Announce a **roadmap update** or **new feature** to keep the community excited.  \n   - Example: *\"Next week: Adding [Feature X]\u2014stay tuned!\"*  \n\n---\n\n### **Bonus Tips**  \n- **Be consistent**: Post daily on social media and engage with comments.  \n- **Offer value**: Free tiers, tutorials, or integrations can incentivize stars.  \n- **Leverage trends**: Align with GitHub events (e.g., Open Source Month) or tech trends.  \n\nBy Day 7, you\u2019ll have a solid foundation of 100+ stars, a growing community, and a clear path to long-term growth. \ud83d\ude80"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 8.0,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 52.97,
+      "p50_latency_sec": 51.878,
+      "p95_latency_sec": 61.674,
+      "total_estimated_cost": 0.000353
+    }
+  },
+  "summary_by_type": {
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 51.878
+      }
+    },
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 45.357
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 61.674
+      }
+    }
+  },
+  "recommended_routing": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

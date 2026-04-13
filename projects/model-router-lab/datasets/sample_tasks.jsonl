@@ -1,0 +1,4 @@
+{"id":"t1","type":"coding_light","prompt":"Write a Python function to remove duplicates from a list while preserving order.","expected":"Use a seen set and list loop.","rubric":"Correctness and concise implementation."}
+{"id":"t2","type":"coding_hard","prompt":"Design an algorithm to debounce file change events and explain complexity.","expected":"Should discuss timer/window strategy and complexity.","rubric":"Technical depth and correctness."}
+{"id":"t3","type":"summarization","prompt":"Summarize why local-first AI tooling can reduce cost and improve privacy.","expected":"Mentions cost reduction, data locality, compliance.","rubric":"Coverage and clarity."}
+{"id":"t4","type":"general","prompt":"Give a 5-step launch plan for an open-source developer tool.","expected":"Clear sequence from MVP to launch and feedback.","rubric":"Practicality and ordering."}

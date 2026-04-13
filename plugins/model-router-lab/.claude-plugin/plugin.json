@@ -1,0 +1,9 @@
+{
+  "name": "model-router-lab",
+  "description": "Benchmark local models, build SLA-aware routing, and render business reports",
+  "version": "0.2.0",
+  "author": {
+    "name": "zrj",
+    "email": "local@example.com"
+  }
+}
