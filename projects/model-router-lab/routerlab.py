@@ -232,13 +232,9 @@ def judge_answer(
     raw, _ = ollama_generate(judge_model, prompt, temperature=0.0, num_predict=judge_max_tokens)
     try:
         m = re.search(r"SCORE\s*:\s*(\d{1,2})", raw, re.IGNORECASE)
-        if m:
-            score = int(m.group(1))
-        else:
-            m2 = re.search(r"\b([1-9]|10)\b", raw)
-            if not m2:
-                raise ValueError("no-score")
-            score = int(m2.group(1))
+        if not m:
+            raise ValueError("no-score-tag")
+        score = int(m.group(1))
         rm = re.search(r"REASON\s*:\s*(.*)", raw, re.IGNORECASE)
         reason = rm.group(1).strip() if rm else raw.strip()[:160]
         return max(1, min(10, score)), reason
