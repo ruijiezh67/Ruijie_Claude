@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/repo_tasks.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.35,
+    "prompt_max_chars": 1100,
+    "answer_max_tokens": 320,
+    "judge_max_tokens": 140,
+    "auto_escalate": false,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776105227
+  },
+  "tasks": [
+    {
+      "id": "repo-1",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 8.588,
+          "approx_tokens": 752,
+          "estimated_cost": 7.52e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, let's look at the code provided. The user wants a concrete improvement with patch-like details. The code is for a Python script that interacts with an Ollama server via HTTP. The main function is _call_ollama, which sends a request to generate text.\n\nFirst, I need to identify potential issues or areas for improvement. The current code handles errors by raising a RuntimeError if the URL is unreachable. But maybe there are other edge cases. For example, what if the Ollama server returns an error in the response? The code currently checks for \"response\" in the data, but maybe the server returns an \"error\" field instead.\n\nAnother thing: the code uses urllib, which is somewhat low-level. Maybe using a higher-level library like requests would be better, but the user might prefer to keep it with urllib for some reason. However, the improvement should be concrete and patch-like, so maybe not changing the library but enhancing error handling.\n\nWait, the code has a line: if not text /think. Wait, that's a typo. It should be 'if not text:' because '/think' is not a valid operator here. That's a syntax error. So that's a critical issue. The code as written would throw a syntax error because of the '/think' part. So the first improvement should be to fix that syntax error.\n\nBut the user's code snippet ends with 'if not text /think' which is incorrect. So the first step is to correct that line. Let me check again. The original code has:\n\ntext"
+        }
+      ]
+    },
+    {
+      "id": "gen-2",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 3,
+          "llm_score": 1,
+          "deterministic_score": 8,
+          "judge_reason": "Okay, let's see. The user wants me to score the candidate's answer on a scale from 1 to 10 based on coverage and practical insight. The task was to summarize ke",
+          "deterministic_reason": "missing expected keywords: 4",
+          "latency_sec": 8.062,
+          "approx_tokens": 441,
+          "estimated_cost": 4.41e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking about the key technical risks when shipping a local-first AI coding product to teams. Let me start by understanding what a local-first AI coding product entails. From what I know, local-first means the core functionality runs on the user's device rather than relying on a central server. So, the product would process code locally, maybe using AI models like code completion, debugging, or refactoring, all without uploading data to the cloud.\n\nFirst, I need to think about the technical challenges here. Since the AI models are running locally, there's the issue of model size and performance. Large models can be resource-intensive, leading to high memory usage and slow performance on less powerful devices. That could be a problem for users with older hardware or lower-end machines.\n\nThen there's the model accuracy. If the model isn't trained well or isn't up-to-date, the AI features might not work as expected. This could lead to errors in code suggestions, which would frustrate users and reduce trust in the product.\n\nData privacy is another big concern. Even though the data is processed locally, there might be cases where data is uploaded for updates or syncing. Ensuring that all data remains private and secure is crucial, especially in industries with strict regulations like healthcare or finance.\n\nIntegration with existing tools is important too. Teams might use various IDEs, version control systems, or collaboration tools. The local-first product needs to integrate smoothly with these without causing compatibility issues or requiring users to change their workflows.\n\nScalability is a challenge. If the product becomes popular, managing"
+        }
+      ]
+    },
+    {
+      "id": "gen-3",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 8,
+          "llm_score": 7,
+          "deterministic_score": 9,
+          "judge_reason": "Okay, let's evaluate the candidate's answer for the 7-day GitHub stars launch plan. The user wants a score from 1 to 10 based on practicality and sequencing.\n\nF",
+          "deterministic_reason": "missing expected keywords: 2",
+          "latency_sec": 8.169,
+          "approx_tokens": 404,
+          "estimated_cost": 4.04e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user wants a 7-day plan to get 100 GitHub stars for their devtool. Let me think about how to approach this. First, I need to break down the steps each day, making sure they're actionable and realistic. \n\nStarting with Day 1, they probably need to set up the repository properly. That means a clear README, good documentation, maybe a demo. Also, setting up the GitHub page and maybe some social media links. They should also start engaging with the community by asking for feedback. Maybe even reach out to potential users via Twitter or LinkedIn.\n\nOn Day 2, they should focus on marketing. Creating a launch post on Twitter, maybe a blog post, and using relevant hashtags. Engaging with dev communities like Reddit or Discord could help. They might also want to create a short video demo to showcase the tool. Collaborating with influencers or developers who might be interested could spread the word faster.\n\nDay 3 is about building momentum. They can run a giveaway or contest to encourage people to star the repo. Maybe offer a prize like a free feature or a shoutout. Also, reaching out to developers who might benefit from the tool, like through GitHub's API or email lists. They should also monitor analytics to see what's working and adjust their strategy.\n\nDay 4 could involve expanding their reach. Maybe creating a LinkedIn post targeting developers, or using paid ads on platforms like Twitter. They might also want to write a detailed blog post explaining the tool's benefits and why it's useful. Engaging with the community by"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 6.0,
+      "pass_rate": 0.667,
+      "avg_latency_sec": 8.273,
+      "p50_latency_sec": 8.169,
+      "p95_latency_sec": 8.588,
+      "total_estimated_cost": 0.00016
+    }
+  },
+  "summary_by_type": {
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 8.588
+      }
+    },
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 3.0,
+        "pass_rate": 0.0,
+        "avg_latency_sec": 8.062
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 8.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 8.169
+      }
+    }
+  },
+  "recommended_routing": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

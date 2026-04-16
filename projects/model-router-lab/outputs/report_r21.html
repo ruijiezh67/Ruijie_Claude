@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1' />
+  <title>Model Router Lab Report</title>
+  <style>
+    :root { --bg:#0b1220; --panel:#121c33; --line:#2a3a62; --text:#eaf0ff; --muted:#9fb0d9; }
+    body { margin:0; font-family: Segoe UI, sans-serif; color:var(--text); background:radial-gradient(circle at 20% 0%, #1a2d56, #0b1220 45%); }
+    .wrap { max-width:1200px; margin:0 auto; padding:24px; }
+    .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; }
+    .routing { margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px; }
+    table { width:100%; border-collapse:collapse; margin-top:14px; background:var(--panel); border:1px solid var(--line); }
+    th,td { border-bottom:1px solid var(--line); padding:8px; text-align:left; font-size:13px; }
+    th { background:#1b2a4b; color:#bed0ff; }
+  </style>
+</head>
+<body>
+  <div class='wrap'>
+    <h1>Model Router Lab</h1>
+    <p>R1 report: dual scoring, SLA routing, and cost-aware recommendations.</p>
+        <div class='routing'><h3>Business Verdict</h3><p>Needs more tuning before launch</p></div>
+    <div class='grid'><div class='card'><h3>qwen3:8b</h3><p><b>Avg Score:</b> 2.0</p><p><b>Pass Rate:</b> 0.0</p><p><b>Avg Latency:</b> 5.546s</p><p><b>P50/P95:</b> 5.462s / 5.789s</p><p><b>Total Cost:</b> $4.3e-05</p></div></div>
+    <div class='routing'>
+      <h3>Recommended Routing by Task Type</h3>
+      <ul><li><b>coding_hard</b> -> qwen3:8b</li><li><b>general</b> -> qwen3:8b</li><li><b>summarization</b> -> qwen3:8b</li></ul>
+    </div>
+    <h3>Type-Level Performance</h3>
+    <table>
+      <thead>
+        <tr><th>Task Type</th><th>Model</th><th>Avg Score</th><th>Pass Rate</th><th>Avg Latency(s)</th></tr>
+      </thead>
+      <tbody><tr><td>coding_hard</td><td>qwen3:8b</td><td>2.0</td><td>0.0</td><td>5.789</td></tr><tr><td>general</td><td>qwen3:8b</td><td>2.0</td><td>0.0</td><td>5.462</td></tr><tr><td>summarization</td><td>qwen3:8b</td><td>2.0</td><td>0.0</td><td>5.388</td></tr></tbody>
+    </table>
+    <h3>Task-Level Runs</h3>
+    <table>
+      <thead>
+        <tr><th>Task</th><th>Type</th><th>Model</th><th>Final</th><th>LLM</th><th>Det</th><th>Latency(s)</th><th>Tokens</th><th>Cost</th><th>Saving</th></tr>
+      </thead>
+      <tbody><tr><td>repo-1</td><td>coding_hard</td><td>qwen3:8b</td><td>2</td><td>1</td><td>3</td><td>5.789</td><td>389</td><td>$3.89e-05</td><td>$0.0</td></tr><tr><td>gen-2</td><td>summarization</td><td>qwen3:8b</td><td>2</td><td>1</td><td>4</td><td>5.388</td><td>21</td><td>$2.1e-06</td><td>$0.0</td></tr><tr><td>gen-3</td><td>general</td><td>qwen3:8b</td><td>2</td><td>1</td><td>4</td><td>5.462</td><td>18</td><td>$1.8e-06</td><td>$0.0</td></tr></tbody>
+    </table>
+  </div>
+</body>
+</html>

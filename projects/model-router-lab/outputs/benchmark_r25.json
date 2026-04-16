@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/repo_tasks.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.35,
+    "prompt_max_chars": 1100,
+    "answer_max_tokens": 320,
+    "judge_max_tokens": 140,
+    "auto_escalate": false,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776105169
+  },
+  "tasks": [
+    {
+      "id": "repo-1",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 8.388,
+          "approx_tokens": 750,
+          "estimated_cost": 7.5e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, let's see. The user provided a Python script that's part of an MCP (Maybe Machine Learning Component?) system, specifically interacting with Ollama. The task is to propose one concrete improvement with patch-like details.\n\nLooking at the code, the main function is _call_ollama, which sends a POST request to Ollama's API. The current code handles errors by raising a RuntimeError if there's a URLError. But maybe there are other edge cases or improvements possible.\n\nFirst, the error handling. Right now, it catches URLError and raises a specific message. But what if the response from Ollama is not in the expected format? For example, if the 'response' key is missing or the data is malformed. The code checks data.get(\"response\", \"\"), which is good, but maybe adding more checks for the structure of the response would help.\n\nAnother thing: the timeout is set to 300 seconds, which is quite long. Maybe that's intentional, but perhaps it's better to have a more reasonable timeout or allow it to be configurable. However, the user might want to keep it as is.\n\nWait, looking at the code, after getting the response, it checks if text is not empty. But the comment is cut off: \"if not text /think\". That's probably a typo. The original code might have had a condition like if not text: ... but it's incomplete. So maybe the code is missing handling cases where the response is empty or invalid.\n\nSo, possible improvements:\n\n1. Enhance error"
+        }
+      ]
+    },
+    {
+      "id": "gen-2",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 3,
+          "llm_score": 1,
+          "deterministic_score": 6,
+          "judge_reason": "Okay, let's see. The user wants me to score the candidate's answer on a scale from 1 to 10 based on coverage and practical insight. The task was to summarize ke",
+          "deterministic_reason": "missing expected keywords: 4",
+          "latency_sec": 8.122,
+          "approx_tokens": 415,
+          "estimated_cost": 4.15e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking about the key technical risks when shipping a local-first AI coding product to teams. Let me start by understanding what a local-first AI coding product entails. From what I know, local-first means the core functionality runs on the user's device rather than relying heavily on cloud servers. So, the product would process code, maybe generate suggestions, or assist with coding tasks locally.\n\nFirst, I need to think about the technical challenges here. Let's break it down. One major area is data processing. If the AI is running locally, it needs to handle large datasets or codebases efficiently. But local devices have limited resources compared to cloud servers. So, maybe the AI model isn't optimized for local execution, leading to performance issues. That's a risk.\n\nAnother point is model size and efficiency. If the model is too big, it might not run smoothly on local devices. Maybe the user has to use a compressed version, which could affect accuracy. Also, model updates\u2014how do you push updates to local models without disrupting the user experience? If the model is too large, updating it might be slow or require a lot of bandwidth.\n\nThen there's the issue of data privacy. Since the data is processed locally, maybe the user is concerned about data being stored on their device. But if the product needs to sync across devices, there's a risk of data leakage if the sync isn't secure. Also, if the AI is trained on user data, there could be privacy concerns if the data isn't anonymized properly.\n\nIntegration with existing tools is another"
+        }
+      ]
+    },
+    {
+      "id": "gen-3",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 6,
+          "judge_reason": "Okay, let's evaluate the candidate's answer for the 7-day GitHub stars launch plan. The user wants a score from 1 to 10 based on practicality and sequencing.\n\nF",
+          "deterministic_reason": "missing expected keywords: 2",
+          "latency_sec": 8.098,
+          "approx_tokens": 397,
+          "estimated_cost": 3.97e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user wants a 7-day plan to get 100 GitHub stars for their devtool. Let me think about how to approach this. First, I need to break down the steps each day, making sure they're actionable and realistic. \n\nStarting with Day 1, they probably need to set up the repository properly. That means a clear README, good documentation, maybe a demo. Also, setting up the GitHub page and maybe some social media links. They should also start engaging with the community by asking for feedback. Maybe even reach out to potential users via Twitter or LinkedIn.\n\nOn Day 2, they should focus on marketing. Creating a launch post on Twitter, maybe a blog post, and using relevant hashtags. Engaging with dev communities like Reddit or Discord could help. They might also want to create a short video demo to showcase the tool. Collaborating with influencers or developers who might be interested could spread the word faster.\n\nDay 3 is about building momentum. They can run a giveaway or contest to encourage people to star the repo. Maybe offer a prize like a free feature or a t-shirt. Also, reaching out to developers who might benefit from the tool, like those in specific niches. They should also start tracking metrics to see what's working.\n\nDay 4, they need to optimize for visibility. Maybe update the README with more details, add a \"Why this tool?\" section. They can also create a GitHub page with a landing page, maybe using tools like GitHub Pages. Engaging with the community by responding to comments and questions"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 5.667,
+      "pass_rate": 0.667,
+      "avg_latency_sec": 8.203,
+      "p50_latency_sec": 8.122,
+      "p95_latency_sec": 8.388,
+      "total_estimated_cost": 0.000156
+    }
+  },
+  "summary_by_type": {
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 8.388
+      }
+    },
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 3.0,
+        "pass_rate": 0.0,
+        "avg_latency_sec": 8.122
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 8.098
+      }
+    }
+  },
+  "recommended_routing": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/research_diffusion-reasoning-smoke_20260415-cleanup-test.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.4,
+    "prompt_max_chars": 1200,
+    "answer_max_tokens": 320,
+    "judge_max_tokens": 120,
+    "auto_escalate": true,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776223548
+  },
+  "tasks": [
+    {
+      "id": "research-1",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 2; long-form coverage bonus",
+          "latency_sec": 18.12,
+          "approx_tokens": 392,
+          "estimated_cost": 3.92e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking about diffusion reasoning and smoke. Wait, maybe they meant \"diffusion reasoning\" and \"smoke\" as a separate topic? Or is \"smoke\" part of the topic? Let me check the original query again. The topic is \"Diffusion reasoning smoke\". Hmm, maybe it's a typo or a specific term. Alternatively, could it be \"diffusion reasoning\" and \"smoke\" as a separate subject? Or perhaps \"diffusion reasoning in smoke\" as a context?\n\nWait, the user might be referring to diffusion processes in the context of reasoning, possibly related to smoke detection or something similar. Alternatively, \"smoke\" could be a typo for \"smoke\" as in the substance, but maybe they meant \"smoke\" as in a metaphorical sense. Alternatively, maybe it's a specific research area where diffusion models are applied to smoke-related problems, like environmental monitoring or safety systems.\n\nAlternatively, maybe the user is referring to \"diffusion reasoning\" as a concept in AI, and \"smoke\" as a metaphor for something else. But I need to clarify. Since the user is asking for a research scout to summarize state-of-the-art directions, key baselines, and open problems, I should consider that \"diffusion reasoning smoke\" might be a specific area. However, without more context, it's a bit ambiguous.\n\nWait, perhaps the user made a typo and meant \"diffusion reasoning\" and \"smoke\" as separate topics. But the way the query is structured, it's one topic."
+        }
+      ]
+    },
+    {
+      "id": "research-2",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "long-form coverage bonus",
+          "latency_sec": 7.97,
+          "approx_tokens": 418,
+          "estimated_cost": 4.18e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking for 5 testable hypotheses related to diffusion reasoning and smoke, ranked by novelty, feasibility, and expected impact. Let me start by understanding what \"diffusion reasoning smoke\" means. Maybe it's a typo or a specific term. Wait, \"diffusion reasoning\" could refer to the spread of ideas or information, and \"smoke\" might be a metaphor for something vague or misleading. Alternatively, it could be a literal term, like smoke diffusion in a physical context. But given the context of hypotheses, it's more likely a metaphorical term.\n\nFirst, I need to clarify the topic. If it's about the spread of information or ideas (diffusion reasoning) and \"smoke\" as a metaphor for misinformation or confusion, then the hypotheses should explore how misinformation spreads. Alternatively, if it's a literal physical process, like smoke diffusion in a room, the hypotheses would be about factors affecting smoke spread. But the mention of \"reasoning\" suggests a cognitive or social process.\n\nAssuming it's about the spread of information (diffusion of ideas) and \"smoke\" as a metaphor for misinformation or confusion, the hypotheses could focus on how misinformation spreads, its impact, and factors influencing it. Let me think of possible hypotheses.\n\n1. Hypothesis 1: Misinformation spreads faster through social media platforms with higher user engagement metrics. This is feasible because we can measure engagement and track misinformation spread. Impact would be moderate.\n\n2. Hypothesis 2: The presence of \"smoke\" (misinformation) in"
+        }
+      ]
+    },
+    {
+      "id": "research-3",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 8.144,
+          "approx_tokens": 455,
+          "estimated_cost": 4.55e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, I need to create a minimal PyTorch experiment scaffold that includes a dataset interface, training loop, and evaluation hooks, specifically for diffusion reasoning smoke. Let me start by recalling what a diffusion model typically involves. Diffusion models are generative models that iteratively add noise to data and then learn to reverse this process. However, the user mentioned \"diffusion reasoning smoke,\" which might be a specific application or a typo. Maybe they meant diffusion models for some kind of reasoning task, or perhaps it's a specific project name. Since the exact context isn't clear, I'll proceed with a general diffusion model scaffold, assuming they want a basic structure that can be adapted for various tasks.\n\nFirst, the dataset interface. For a diffusion model, the dataset should provide data samples, possibly with some augmentation or noise. Let's assume the dataset is images, but it could be any data type. The dataset class should be a PyTorch Dataset, implementing __len__ and __getitem__. Maybe include a method to add noise to the data for training.\n\nNext, the training loop. The training loop for diffusion models typically involves forward passes where the model predicts the noise added to the data. The loss is computed by comparing the predicted noise with the actual noise. The training loop will need to handle data loading, model training, optimizer steps, and possibly logging.\n\nEvaluation hooks: These are functions or methods that are called during training to evaluate the model's performance. For diffusion models, evaluation might involve generating samples from the model, calculating metrics like FID or IS (Inception Score"
+        }
+      ]
+    },
+    {
+      "id": "research-4",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "long-form coverage bonus",
+          "latency_sec": 8.316,
+          "approx_tokens": 444,
+          "estimated_cost": 4.44e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user wants me to design an ablation study plan for diffusion reasoning smoke. Let me start by understanding what exactly they're asking for. Ablation studies are used to determine the importance of different components in a model. So, the goal here is to figure out which variables (components) are crucial for the diffusion reasoning process related to smoke detection or analysis.\n\nFirst, I need to clarify what \"diffusion reasoning smoke\" refers to. Maybe it's a specific model or method used for smoke detection using diffusion models? Or perhaps it's a term related to how reasoning is applied in diffusion processes for smoke-related tasks. Since the user hasn't provided more context, I'll assume it's a model that uses diffusion processes for reasoning about smoke, maybe in an image or sensor data context.\n\nNext, the user wants variables, metrics, and stopping criteria. Variables would be the components of the model that can be ablated. Metrics are the evaluation criteria to measure the impact of each ablation. Stopping criteria would determine when to stop the experiments, like when performance drops below a threshold or after a certain number of iterations.\n\nLet me outline possible variables. Common components in diffusion models include the noise schedule, diffusion steps, attention mechanisms, conditioning inputs, etc. For smoke reasoning, maybe the model uses some form of spatial or temporal reasoning, so variables could be related to those aspects.\n\nMetrics would depend on the task. If it's detection, accuracy, precision, recall, F1-score. If it's reasoning, maybe coherence, logical consistency, or specific task performance metrics"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 9.25,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 10.637,
+      "p50_latency_sec": 8.316,
+      "p95_latency_sec": 18.12,
+      "total_estimated_cost": 0.000171
+    }
+  },
+  "summary_by_type": {
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 18.12
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 8.143
+      }
+    },
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 8.144
+      }
+    }
+  },
+  "recommended_routing": {
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b",
+    "coding_hard": "qwen3:8b"
+  }
+}

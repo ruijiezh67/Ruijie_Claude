@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "source_report": "projects/model-router-lab/outputs/benchmark_r24.json",
+    "created_at": 1776105136,
+    "min_score": 7.0,
+    "sla_max_latency_sec": 45.0
+  },
+  "default_model": "qwen3:8b",
+  "escalation_model": "qwen3:8b",
+  "retry_policy": {
+    "enabled": true,
+    "retry_if_score_below": 7.0,
+    "max_retries": 1,
+    "retry_model": "qwen3:8b"
+  },
+  "routing_rules": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b",
+    "coding_light": "qwen3:8b"
+  },
+  "model_stats": {
+    "qwen3:8b": {
+      "avg_score": 4.333,
+      "pass_rate": 0.333,
+      "avg_latency_sec": 8.23,
+      "p50_latency_sec": 8.158,
+      "p95_latency_sec": 8.415,
+      "total_estimated_cost": 0.000159
+    }
+  }
+}

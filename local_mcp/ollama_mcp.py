@@ -42,7 +42,7 @@ def _call_ollama(prompt: str, model: str, temperature: float) -> str:
 @mcp.tool()
 def ask_local_qwen(
     prompt: str,
-    model: str = "qwen2.5:7b",
+    model: str = "qwen3:8b",
     temperature: float = 0.2,
 ) -> str:
     """Send a prompt to local Ollama model (Qwen by default) and return the generated text."""

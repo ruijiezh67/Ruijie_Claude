@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/repo_tasks.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.4,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776103691
+  },
+  "tasks": [
+    {
+      "id": "repo-1",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "The proposed improvement directly addresses a critical gap in error handling by leveraging Ollama's documented error response format. The patch adds specific checks for the 'error' field in API responses, which aligns with actual Ollama API behavior (e.g., model not found errors). The solution is actionable (clear code modification), correct (handles both network and API errors), and demonstrates technical depth by understanding the API's error semantics. The rationale effectively explains how this enhances robustness and debuggability.",
+          "deterministic_reason": "deterministic checks passed",
+          "latency_sec": 44.786,
+          "approx_tokens": 906,
+          "estimated_cost": 9.06e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "**Proposed Improvement:**  \nEnhance error handling in `_call_ollama` to explicitly check for Ollama server errors (e.g., invalid model names, internal server errors) and raise descriptive exceptions.\n\n---\n\n**Patch Details:**  \nModify the `_call_ollama` function to check for an `\"error\"` field in the Ollama response, which is common in cases like model not found or server failures. This provides more informative error messages to users.\n\n```python\ndef _call_ollama(prompt: str, model: str, temperature: float) -> str:\n    payload = {\n        \"model\": model,\n        \"prompt\": prompt,\n        \"stream\": False,\n        \"options\": {\n            \"temperature\": temperature,\n        },\n    }\n\n    req = urllib.request.Request(\n        \"http://127.0.0.1:11434/api/generate\",\n        data=json.dumps(payload).encode(\"utf-8\"),\n        headers={\"Content-Type\": \"application/json\"},\n        method=\"POST\",\n    )\n\n    try:\n        with urllib.request.urlopen(req, timeout=300) as resp:\n            data = json.loads(resp.read().decode(\"utf-8\"))\n    except urllib.error.URLError as e:\n        raise RuntimeError(\n            \"Cannot reach Ollama at http://127.0.0.1:11434. Please start Ollama first.\"\n        ) from e\n\n    # Check for Ollama-specific errors (e.g., invalid model, server issues)\n    if \"error\" in data:\n        raise RuntimeError(f\"Ollama error: {data['error']}\")\n\n    text = data.get(\"response\", \"\")\n    if not text:\n        raise RuntimeError(\"Ollama returned an empty response.\")\n    return text\n```\n\n---\n\n**Why This Matters:**  \n- **Robustness:** Directly handles Ollama's error responses (e.g., `{\"error\": \"Model not found\"}`), avoiding generic exceptions.  \n- **Debuggability:** Users get precise error messages, reducing time to diagnose issues like missing models or server misconfigurations.  \n- **Compatibility:** Aligns with Ollama's API behavior, where errors are often returned in the top-level `\"error\"` field.  \n\nThis change ensures the tool gracefully fails with actionable feedback, improving the user experience and reliability of the integration."
+        }
+      ]
+    },
+    {
+      "id": "gen-2",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 8,
+          "deterministic_score": 6,
+          "judge_reason": "The answer comprehensively covers most key technical risks (e.g., hardware variability, model size, security, compliance) and provides practical mitigation strategies. However, it lacks explicit mention of 'evaluation bias' and 'support cost' as expected. The depth of coverage is strong, but the answer could be more concise while still maintaining practical insight.",
+          "deterministic_reason": "missing expected keywords: 2",
+          "latency_sec": 46.29,
+          "approx_tokens": 1297,
+          "estimated_cost": 0.0001297,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "When shipping a **local-first AI coding product** (e.g., an AI tool that runs primarily on the user's local machine rather than relying on cloud infrastructure), several **technical risks** must be carefully managed. Here's a structured summary of key risks:\n\n---\n\n### **1. Computational and Hardware Requirements**\n- **Resource Intensity**: Large AI models (e.g., LLMs) require significant CPU/GPU power, RAM, and storage. Users with lower-end hardware may experience poor performance or crashes.\n- **Hardware Variability**: Performance depends on user hardware (e.g., older laptops, limited RAM), leading to inconsistent user experiences.\n- **Battery Life**: Local AI workloads may drain device batteries faster, especially on mobile or laptops.\n\n---\n\n### **2. Model Size and Storage**\n- **Storage Overhead**: Large models (e.g., 10GB+ files) may exceed user storage limits, especially on devices with limited capacity (e.g., low-end laptops or tablets).\n- **Installation Complexity**: Users may struggle with installing large models, especially if they lack technical expertise or have restricted admin rights.\n\n---\n\n### **3. Data Privacy and Security**\n- **Local Data Handling**: While local processing may reduce data exposure, users may still expect transparency about how their data is stored, encrypted, or shared (e.g., for collaboration).\n- **Security Vulnerabilities**: Local applications are susceptible to malware, exploits, or insecure code execution if not properly sandboxed or encrypted.\n- **Data Sync Risks**: If the product includes cloud features (e.g., collaboration, backups), data leakage or unauthorized access during sync could occur.\n\n---\n\n### **4. Latency and Performance**\n- **Local vs. Cloud Trade-offs**: Hybrid models (local execution + cloud features) may introduce latency or inconsistent performance when switching between modes.\n- **Model Inference Speed**: Local inference may be slower than cloud-based solutions, especially for complex tasks, impacting user productivity.\n\n---\n\n### **5. Integration with Existing Tools**\n- **IDE Compatibility**: Poor integration with popular code editors (e.g., VS Code, IntelliJ) or version control systems (e.g., Git) could hinder adoption.\n- **Plugin/Extension Support**: Lack of support for local extensions or plugins may limit functionality compared to cloud-based alternatives.\n\n---\n\n### **6. Scalability and Maintenance**\n- **Distributed Updates**: Updating models or features on local devices requires efficient distribution mechanisms (e.g., OTA updates, version control).\n- **Cross-Platform Challenges**: Ensuring compatibility across operating systems (Windows, macOS, Linux) and hardware architectures (x86, ARM) adds complexity.\n- **User-Specific Customization**: Managing user-specific model configurations or preferences across devices may be resource-intensive.\n\n---\n\n### **7. User Experience (UX) and Adoption**\n- **Onboarding Complexity**: Users may struggle with installing, configuring, or understanding the local-first workflow, especially if they are accustomed to cloud-based tools.\n- **Performance Expectations**: Users may expect the same speed and reliability as cloud-based AI tools, leading to dissatisfaction if local execution is slower or less stable.\n\n---\n\n### **8. Compliance and Legal Risks**\n- **Data Residency Laws**: Storing or processing data locally may conflict with regional regulations (e.g., GDPR, CCPA) if data is not stored in compliant jurisdictions.\n- **Model Licensing**: Distributing AI models locally may require compliance with licensing terms (e.g., open-source vs. proprietary models).\n\n---\n\n### **9. Local Infrastructure Reliability**\n- **Hardware Failures**: Local storage or processing failures (e.g., corrupted files, hardware malfunctions) could lead to data loss or downtime.\n- **Dependency on Local Networks**: If the product requires occasional cloud sync, poor internet connectivity could disrupt functionality.\n\n---\n\n### **10. Interoperability and Ecosystem Lock-in**\n- **Vendor Lock-in**: Users may face challenges migrating to other tools if the local-first product is tightly coupled with proprietary formats or APIs.\n- **Ecosystem Fragmentation**: Lack of standardization for local AI execution (e.g., model formats, runtime environments) could limit interoperability with other tools.\n\n---\n\n### **Mitigation Strategies**\n- **Optimize Model Size**: Use model compression, quantization, or lightweight variants (e.g., distillation) to reduce resource demands.\n- **Hybrid Architecture**: Balance local and cloud features (e.g., local inference + cloud training) to mitigate latency and scalability issues.\n- **Robust Security**: Implement end-to-end encryption, sandboxing, and regular security audits for local execution.\n- **Cross-Platform Testing**: Ensure compatibility across devices and OS versions, with clear system requirements.\n- **User Education**: Provide clear documentation and onboarding to reduce friction for local-first workflows.\n\nBy addressing these risks proactively, teams can ensure a smoother rollout and adoption of local-first AI coding products."
+        }
+      ]
+    },
+    {
+      "id": "gen-3",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 6,
+          "judge_reason": "The plan is practical and well-structured, covering key elements like demo (YouTube/Gist), docs (README), channels (Twitter/Reddit), feedback loop (issue responses), and release cadence (v1.0). Sequencing builds momentum from setup to community engagement. However, some steps (e.g., influencer outreach, paid promotion) may be overly ambitious for a 7-day window, and the plan lacks specific metrics for tracking progress. More realistic time allocation and clearer prioritization would improve practicality.",
+          "deterministic_reason": "missing expected keywords: 2",
+          "latency_sec": 57.272,
+          "approx_tokens": 1401,
+          "estimated_cost": 0.0001401,
+          "estimated_saving_vs_baseline": 0.0,
+          "answer": "Here's a **7-day launch plan** to get your devtool to **100 GitHub stars** by leveraging visibility, community engagement, and value-driven promotion. This plan balances outreach, feedback loops, and strategic visibility to build momentum.\n\n---\n\n### **Day 1: Setup & Foundation**\n**Goal:** Prepare your repo for launch and build initial buzz.  \n- **1. Optimize Your README**  \n  - Write a clear, concise README with:  \n    - Problem statement (what your devtool solves).  \n    - Key features (highlight 3-5).  \n    - Installation steps (simple, step-by-step).  \n    - Use cases (e.g., \"Automate repetitive tasks\").  \n    - Call-to-action (e.g., \"Star if you're interested!\").  \n  - Add a **GitHub Page** or **Markdown documentation** for deeper details.  \n- **2. Launch a Blog Post or Dev.to Article**  \n  - Write a short article explaining your devtool\u2019s purpose, why it\u2019s needed, and how it\u2019s different.  \n  - Include a **link to your GitHub repo**.  \n- **3. Tweet Your Launch**  \n  - Post a tweet with your repo link, a short description, and a call-to-action (e.g., \"Star if you\u2019re interested!\").  \n  - Use hashtags: `#devtools`, `#github`, `#softwaredev`.  \n- **4. Join Dev Communities**  \n  - Post in **Dev.to**, **Reddit (r/programming, r/devtools)**, or **Discord servers** (e.g., Dev.to Discord).  \n\n---\n\n### **Day 2: Engage Early Adopters**\n**Goal:** Build a small community and gather feedback.  \n- **1. Create a Discord/Slack Channel**  \n  - Invite early users to a private channel for feedback, bug reports, and feature requests.  \n- **2. Ask for Feedback**  \n  - Post in your Dev.to article or Reddit:  \n    *\"We\u2019re looking for early adopters! If you\u2019re interested, join our Discord and help shape the tool.\"*  \n- **3. Respond to Issues**  \n  - If someone opens an issue, reply quickly (e.g., \"Thanks for the feedback! We\u2019ll prioritize this in the next release\").  \n- **4. Share a GitHub Gist**  \n  - Post a short example of your devtool in action (e.g., a code snippet or workflow).  \n\n---\n\n### **Day 3: Collaborate & Partner**\n**Goal:** Leverage partnerships and influencer reach.  \n- **1. Reach Out to Influencers**  \n  - Message developers or YouTubers in your niche (e.g., \"Hey [Name], I built a devtool that might interest your audience\u2014would you mind sharing it?\").  \n- **2. Create a GitHub Release**  \n  - Tag your first release (e.g., v1.0) with a changelog and a short video demo.  \n- **3. Post on Hacker News**  \n  - Submit a link to your repo with a brief explanation.  \n- **4. Add a \"Star if You Like\" Section**  \n  - In your README, add:  \n    *\"Star this repo if you\u2019d like to see this tool grow!\"*  \n\n---\n\n### **Day 4: Launch & Amplify Visibility**\n**Goal:** Drive traffic and convert viewers to stars.  \n- **1. Launch a Twitter Thread**  \n  - Share a 5-7 tweet thread explaining your devtool\u2019s problem, solution, and roadmap.  \n  - Include a **call-to-action**: \"Star if you\u2019re interested!\"  \n- **2. Post a YouTube Video or Demo**  \n  - Create a 2-3 minute video showing your devtool in action.  \n  - Upload to YouTube and share the link on social media.  \n- **3. Use Paid Promotion (Optional)**  \n  - Boost your Twitter post or Reddit post to reach a wider audience.  \n- **4. Add a \"Star Count\" Tracker**  \n  - Use a GitHub widget or a simple counter to show progress (e.g., \"We\u2019re at 50 stars!\").  \n\n---\n\n### **Day 5: Engage & Respond**\n**Goal:** Keep the community active and build trust.  \n- **1. Respond to Stars**  \n  - Thank users who star your repo (e.g., \"Thanks for starring! We\u2019re excited to grow this tool together!\").  \n- **2. Share User Stories**  \n  - Post a tweet or blog post:  \n    *\"User @username just used our devtool to save 2 hours a week! \ud83d\ude80\"*  \n- **3. Host a Live Demo**  \n  - Do a 15-minute live stream on Twitch or YouTube showing your devtool.  \n- **4. Update the README**  \n  - Add a \"Thank You\" section for early supporters and a roadmap.  \n\n---\n\n### **Day 6: Expand Reach**\n**Goal:** Tap into new audiences and networks.  \n- **1. Post on Reddit**  \n  - Share your repo in subreddits like r/programming, r/learnpython, or r/devtools.  \n- **2. LinkedIn Post**  \n  - Write a professional post about your devtool\u2019s purpose and invite developers to star it.  \n- **3. Add a \"Why Star Us?\" Section**  \n  - In your README, explain why users should star your repo (e.g., \"To help us prioritize features\").  \n- **4. Ask for Testers**  \n  - Post: *\"We\u2019re looking for testers! If you star this repo, we\u2019ll send you early access to the next release.\"*  \n\n---\n\n### **Day 7: Maintain Momentum**\n**Goal:** Sustain interest and thank your supporters.  \n- **1. Thank the First 100 Stars**  \n  - Create a list of the first 100 stars and post it publicly (e.g., \"Thanks to these 100 supporters!\").  \n- **2. Share Progress**  \n  - Post: *\"We hit 100 stars! \ud83c\udf89 Thanks to everyone who supported this tool. Here\u2019s what\u2019s next...\"*  \n- **3. Keep the Community Active**  \n  - Reply to issues, merge pull requests, and update the README with new features.  \n- **4. Plan for the Future**  \n  - Add a roadmap to your README and announce upcoming features (e.g., \"Next: AI-powered automation!\").  \n\n---\n\n### **Bonus Tips**  \n- **Use Hashtags:** `#devtools`, `#github`, `#softwaredev`, `#openSource`.  \n- **Track Metrics:** Use tools like **GitHub Insights** or **Google Analytics** to monitor traffic.  \n- **Be Consistent:** Reply to comments, update the repo, and stay active in communities.  \n\nBy Day 7, you\u2019ll have a growing community, a clear value proposition, and a foundation for long-term growth. \ud83d\ude80"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 8.0,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 49.449,
+      "p50_latency_sec": 46.29,
+      "p95_latency_sec": 57.272,
+      "total_estimated_cost": 0.00036
+    }
+  },
+  "summary_by_type": {
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 44.786
+      }
+    },
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 46.29
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 57.272
+      }
+    }
+  },
+  "recommended_routing": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

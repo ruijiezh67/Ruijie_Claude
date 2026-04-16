@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/repo_tasks.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.4,
+    "prompt_max_chars": 900,
+    "answer_max_tokens": 220,
+    "judge_max_tokens": 80,
+    "auto_escalate": false,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776104862
+  },
+  "tasks": [
+    {
+      "id": "repo-1",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 2,
+          "llm_score": 1,
+          "deterministic_score": 3,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 1; missing code block; answer too short",
+          "latency_sec": 5.789,
+          "approx_tokens": 389,
+          "estimated_cost": 3.89e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": ""
+        }
+      ]
+    },
+    {
+      "id": "gen-2",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 2,
+          "llm_score": 1,
+          "deterministic_score": 4,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 4; answer too short",
+          "latency_sec": 5.388,
+          "approx_tokens": 21,
+          "estimated_cost": 2.1e-06,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": ""
+        }
+      ]
+    },
+    {
+      "id": "gen-3",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 2,
+          "llm_score": 1,
+          "deterministic_score": 4,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 4; answer too short",
+          "latency_sec": 5.462,
+          "approx_tokens": 18,
+          "estimated_cost": 1.8e-06,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": ""
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 2.0,
+      "pass_rate": 0.0,
+      "avg_latency_sec": 5.546,
+      "p50_latency_sec": 5.462,
+      "p95_latency_sec": 5.789,
+      "total_estimated_cost": 4.3e-05
+    }
+  },
+  "summary_by_type": {
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 2.0,
+        "pass_rate": 0.0,
+        "avg_latency_sec": 5.789
+      }
+    },
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 2.0,
+        "pass_rate": 0.0,
+        "avg_latency_sec": 5.388
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 2.0,
+        "pass_rate": 0.0,
+        "avg_latency_sec": 5.462
+      }
+    }
+  },
+  "recommended_routing": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "topic": "Diffusion reasoning smoke",
+  "topic_slug": "diffusion-reasoning-smoke",
+  "runs": [
+    {
+      "topic": "Diffusion reasoning smoke",
+      "topic_slug": "diffusion-reasoning-smoke",
+      "run_id": "20260415-smoke-v1",
+      "timestamp": "2026-04-15T02:36:51Z",
+      "files": {
+        "dataset": "projects/model-router-lab/datasets/research_diffusion-reasoning-smoke_20260415-smoke-v1.jsonl",
+        "benchmark": "projects/model-router-lab/outputs/benchmark_research_diffusion-reasoning-smoke_20260415-smoke-v1.json",
+        "policy": "projects/model-router-lab/outputs/policy_research_diffusion-reasoning-smoke_20260415-smoke-v1.json",
+        "simulation": "projects/model-router-lab/outputs/simulation_research_diffusion-reasoning-smoke_20260415-smoke-v1.json",
+        "control_plane": "projects/model-router-lab/outputs/control_plane_research_diffusion-reasoning-smoke_20260415-smoke-v1.json",
+        "control_plane_evolved": "projects/model-router-lab/outputs/control_plane_evolved_research_diffusion-reasoning-smoke_20260415-smoke-v1.json",
+        "control_plane_simulation": "projects/model-router-lab/outputs/control_plane_evolved_simulation_research_diffusion-reasoning-smoke_20260415-smoke-v1.json",
+        "report": "projects/model-router-lab/outputs/report_research_diffusion-reasoning-smoke_20260415-smoke-v1.html"
+      },
+      "metrics": {
+        "simulation": {
+          "avg_score": 9.0,
+          "p95_latency_sec": 59.536,
+          "verdict": "needs-optimization"
+        },
+        "control_plane": {
+          "avg_score": 9.0,
+          "p95_latency_sec": 59.536,
+          "verdict": "needs-more-policy-evolution"
+        }
+      }
+    },
+    {
+      "topic": "Diffusion reasoning smoke",
+      "topic_slug": "diffusion-reasoning-smoke",
+      "run_id": "20260415-smoke-v2",
+      "timestamp": "2026-04-15T02:42:02Z",
+      "files": {
+        "dataset": "projects/model-router-lab/datasets/research_diffusion-reasoning-smoke_20260415-smoke-v2.jsonl",
+        "benchmark": "projects/model-router-lab/outputs/benchmark_research_diffusion-reasoning-smoke_20260415-smoke-v2.json",
+        "policy": "projects/model-router-lab/outputs/policy_research_diffusion-reasoning-smoke_20260415-smoke-v2.json",
+        "simulation": "projects/model-router-lab/outputs/simulation_research_diffusion-reasoning-smoke_20260415-smoke-v2.json",
+        "control_plane": "projects/model-router-lab/outputs/control_plane_research_diffusion-reasoning-smoke_20260415-smoke-v2.json",
+        "control_plane_evolved": "projects/model-router-lab/outputs/control_plane_evolved_research_diffusion-reasoning-smoke_20260415-smoke-v2.json",
+        "control_plane_simulation": "projects/model-router-lab/outputs/control_plane_evolved_simulation_research_diffusion-reasoning-smoke_20260415-smoke-v2.json",
+        "report": "projects/model-router-lab/outputs/report_research_diffusion-reasoning-smoke_20260415-smoke-v2.html"
+      },
+      "metrics": {
+        "simulation": {
+          "avg_score": 9.0,
+          "p95_latency_sec": 56.413,
+          "verdict": "needs-optimization"
+        },
+        "control_plane": {
+          "avg_score": 9.0,
+          "p95_latency_sec": 56.413,
+          "verdict": "needs-more-policy-evolution"
+        }
+      }
+    },
+    {
+      "topic": "Diffusion reasoning smoke",
+      "topic_slug": "diffusion-reasoning-smoke",
+      "run_id": "20260415-cleanup-test",
+      "timestamp": "2026-04-15T03:26:44Z",
+      "files": {
+        "dataset": "projects/model-router-lab/datasets/research_diffusion-reasoning-smoke_20260415-cleanup-test.jsonl",
+        "benchmark": "projects/model-router-lab/outputs/benchmark_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+        "policy": "projects/model-router-lab/outputs/policy_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+        "simulation": "projects/model-router-lab/outputs/simulation_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+        "control_plane": "projects/model-router-lab/outputs/control_plane_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+        "control_plane_evolved": "projects/model-router-lab/outputs/control_plane_evolved_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+        "control_plane_simulation": "projects/model-router-lab/outputs/control_plane_evolved_simulation_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+        "report": "projects/model-router-lab/outputs/report_research_diffusion-reasoning-smoke_20260415-cleanup-test.html"
+      },
+      "metrics": {
+        "simulation": {
+          "avg_score": 9.25,
+          "p95_latency_sec": 18.12,
+          "verdict": "good"
+        },
+        "control_plane": {
+          "avg_score": 9.25,
+          "p95_latency_sec": 18.12,
+          "verdict": "innovative-ready"
+        }
+      }
+    }
+  ]
+}

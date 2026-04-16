@@ -1,0 +1,7 @@
+{
+  "routed_tasks": 3,
+  "escalation_candidates": 0,
+  "predicted_avg_score": 8.667,
+  "predicted_p95_latency_sec": 18.882,
+  "verdict": "innovative-ready"
+}

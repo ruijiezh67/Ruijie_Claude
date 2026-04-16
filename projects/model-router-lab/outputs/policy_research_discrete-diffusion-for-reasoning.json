@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "source_report": "projects/model-router-lab/outputs/benchmark_research_discrete-diffusion-for-reasoning.json",
+    "created_at": 1776219855,
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0
+  },
+  "default_model": "qwen3:8b",
+  "escalation_model": "qwen3:8b",
+  "retry_policy": {
+    "enabled": true,
+    "retry_if_score_below": 7,
+    "max_retries": 1,
+    "retry_model": "qwen3:8b"
+  },
+  "routing_rules": {
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b",
+    "coding_hard": "qwen3:8b",
+    "coding_light": "qwen3:8b"
+  },
+  "model_stats": {
+    "qwen3:8b": {
+      "avg_score": 9.0,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 60.505,
+      "p50_latency_sec": 54.611,
+      "p95_latency_sec": 84.811,
+      "total_estimated_cost": 0.000515
+    }
+  }
+}

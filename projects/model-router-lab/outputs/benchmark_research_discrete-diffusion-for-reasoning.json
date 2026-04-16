@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/research_discrete-diffusion-for-reasoning.jsonl",
+    "models": [
+      "qwen3:8b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.4,
+    "prompt_max_chars": 1200,
+    "answer_max_tokens": 320,
+    "judge_max_tokens": 120,
+    "auto_escalate": true,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776219367
+  },
+  "tasks": [
+    {
+      "id": "research-1",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 2; long-form coverage bonus",
+          "latency_sec": 84.811,
+          "approx_tokens": 489,
+          "estimated_cost": 4.89e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking about \"Discrete diffusion for reasoning\" and wants a summary of state-of-the-art directions, key baselines, and open problems. Let me start by recalling what discrete diffusion models are. They're a type of generative model that uses discrete steps, unlike continuous diffusion which uses continuous time steps. But how does this apply to reasoning?\n\nFirst, I need to understand the context. Discrete diffusion might be used in tasks where the process is inherently discrete, like reasoning steps or logical deductions. Maybe they're trying to model how reasoning unfolds in discrete stages, similar to how diffusion models generate images step by step but in a discrete manner.\n\nState-of-the-art directions... I remember that diffusion models have been adapted for various tasks beyond image generation. For reasoning, perhaps they're using discrete diffusion to model logical steps or sequential reasoning. Maybe there's work on integrating discrete diffusion with neural networks for structured reasoning tasks. Also, there's the aspect of combining diffusion with reinforcement learning for decision-making processes.\n\nKey baselines would be existing models that have been adapted for discrete diffusion in reasoning. For example, maybe some models use discrete time steps to simulate reasoning steps, or they use transformers with diffusion-like processes. I should check if there are specific papers or frameworks that have been established in this area.\n\nOpen problems might include the challenge of making discrete diffusion models efficient, since each step could be computationally heavy. Also, ensuring that the discrete steps capture the necessary logical structure without losing information. There's also the issue of training such models, as the loss functions might differ"
+        }
+      ]
+    },
+    {
+      "id": "research-2",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "long-form coverage bonus",
+          "latency_sec": 53.152,
+          "approx_tokens": 458,
+          "estimated_cost": 4.58e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking for 5 testable hypotheses related to discrete diffusion for reasoning, ranked by novelty, feasibility, and expected impact. Let me start by understanding what discrete diffusion for reasoning entails. From what I know, discrete diffusion models are a type of generative model that uses discrete steps to propagate information, often used in tasks like image generation or text generation. But when applied to reasoning, it might involve structured reasoning processes, maybe in NLP or AI systems.\n\nFirst, I need to define what \"discrete diffusion for reasoning\" means. It could be a model that uses discrete diffusion steps to perform logical reasoning tasks. So, the hypotheses should explore how such models can be applied to reasoning, their effectiveness, and potential improvements.\n\nNow, the user wants 5 hypotheses. Let me brainstorm possible angles. Maybe one could be about how discrete diffusion models compare to traditional reasoning models. Another might involve the role of discrete steps in capturing logical dependencies. There's also the aspect of interpretability, like whether the diffusion steps can be made interpretable. Then, maybe the integration with existing reasoning frameworks, and finally, the impact on complex reasoning tasks.\n\nFor each hypothesis, I need to assess novelty, feasibility, and impact. Novelty refers to how new the idea is. Feasibility is about whether it can be tested with current technology. Impact is the potential contribution to the field.\n\nLet me start with the first hypothesis. Maybe something about the effectiveness of discrete diffusion in structured reasoning tasks. That's a common area, so maybe not the most novel. But it's"
+        }
+      ]
+    },
+    {
+      "id": "research-3",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 54.611,
+          "approx_tokens": 438,
+          "estimated_cost": 4.38e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, I need to create a minimal PyTorch experiment scaffold for discrete diffusion for reasoning. Let me start by recalling what discrete diffusion models are. They're typically used for generating sequences, like text or tokens, by gradually adding noise and then learning to reverse the process. For reasoning tasks, maybe it's about generating logical steps or something similar.\n\nFirst, the user wants a dataset interface. So I need to define a class that loads the data. Maybe something like a custom Dataset class in PyTorch. The dataset should have __len__ and __getitem__ methods. For simplicity, perhaps using a dummy dataset for now, but the user might want it to be flexible. Maybe the dataset should handle tokenization, but since it's a minimal example, maybe just using integers as tokens.\n\nNext, the training loop. PyTorch typically uses DataLoader, optimizers, loss functions. The model would be a diffusion model. Since it's discrete, maybe using a transformer-based architecture? Or a simple model for demonstration. But since it's minimal, perhaps a simple model that takes a sequence of tokens and predicts the next token, but adapted for diffusion.\n\nWait, diffusion models usually involve a series of steps where noise is added to data, and the model learns to reverse this process. For discrete data, like tokens, the noise might be adding random tokens at each step. So the training loop would involve sampling a sequence, adding noise, then training the model to predict the original sequence from the noisy one.\n\nBut how to structure the model? Maybe a simple transformer or a CNN"
+        }
+      ]
+    },
+    {
+      "id": "research-4",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "long-form coverage bonus",
+          "latency_sec": 54.611,
+          "approx_tokens": 467,
+          "estimated_cost": 4.67e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user wants me to design an ablation plan for discrete diffusion for reasoning. Let me start by recalling what discrete diffusion for reasoning entails. From what I remember, discrete diffusion models are used in tasks like reasoning, where the model generates step-by-step reasoning paths. These models typically involve a series of diffusion steps that gradually build up the answer through intermediate reasoning steps.\n\nNow, the user is asking for an ablation plan. Ablation studies are used to understand the impact of different components of a model. So, I need to identify the key variables, metrics, and stopping criteria for this study.\n\nFirst, variables. The main variables would be the components of the discrete diffusion model. Let me think: the diffusion steps, the reasoning modules, the noise schedule, the temperature parameters, and maybe the training data. Each of these could be varied to see their impact.\n\nFor diffusion steps, varying the number of steps could affect the model's ability to reason through complex problems. More steps might allow for more detailed reasoning but could also increase computational cost. Then, reasoning modules\u2014maybe different types of modules like attention mechanisms, transformers, or other architectures. The noise schedule refers to how the noise is added over time during diffusion. Changing this could affect the model's learning process. Temperature parameters control the randomness in the generation process. Lastly, training data\u2014using different datasets or varying the amount of data could influence the model's performance.\n\nNext, metrics. The user will need to evaluate the model's performance. Common metrics for reasoning tasks include accuracy, which measures how often the model"
+        }
+      ]
+    },
+    {
+      "id": "research-lit-1",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "long-form coverage bonus",
+          "latency_sec": 56.203,
+          "approx_tokens": 1643,
+          "estimated_cost": 0.0001643,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, let's tackle this query. The user wants me to use the provided arXiv corpus to identify research gaps, conflicting claims, and replication risks. The corpus has two papers: one from 2025 about cognitive flow and AI interventions, and another from 2024 on discrete diffusion models for categorical data.\n\nFirst, I need to understand each paper's focus. The first paper is about cognitive flow in AI-augmented reasoning, suggesting that disrupting this state can hinder decision-making. They propose a context-aware framework based on type, timing, and other factors. The second paper is about discrete diffusion models, specifically for categorical data, and mentions Campbell et al. (2022) introducing a continuous-time framework.\n\nNow, looking for research gaps. The first paper's abstract mentions that interventions disrupting cognitive flow can be harmful, but maybe there's a gap in how these interventions are actually implemented or evaluated. The second paper talks about discrete diffusion models but notes that continuous-time frameworks are recent. Maybe there's a gap in applying these models to specific data types or in their efficiency compared to existing methods.\n\nConflicting claims: The first paper's focus is on maintaining cognitive flow, while the second is about diffusion models. Are there any conflicts? Maybe not directly, but perhaps the first paper's context-aware approach could be applied to the diffusion models. However, the user might be looking for contradictions between the two papers. Wait, the second paper's abstract mentions that discrete-time models have been around, but continuous-time is new. The first paper's context"
+        }
+      ]
+    },
+    {
+      "id": "research-lit-2",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 59.64,
+          "approx_tokens": 1653,
+          "estimated_cost": 0.0001653,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, let's tackle this query. The user wants a PyTorch-ready experiment plan based on the provided arXiv corpus. The topic is Discrete diffusion for reasoning. They mentioned including dataset splits, baseline, ablation switches, and metric logging hooks. Also, they want code comments and an executable scaffold.\n\nFirst, I need to parse the corpus. The first paper talks about cognitive flow and context-aware AI interventions for reasoning. The second paper is about unified discrete diffusion for categorical data, which seems relevant to the topic. The user probably wants to combine these ideas, using discrete diffusion models for reasoning tasks, possibly in a context-aware way.\n\nSo, the experiment plan should involve training a discrete diffusion model for reasoning tasks. The dataset split would need to be into training, validation, and test sets. The baseline could be a standard discrete diffusion model without context-aware features. Ablation switches might include different context factors or components of the model.\n\nFor the code structure, I'll start with imports, then define the dataset class. The dataset should split into train, val, test. Then, the model architecture, which is a discrete diffusion model. The baseline could be a simpler version without context. Ablation switches would be flags to enable or disable certain features.\n\nMetric logging hooks would track loss, accuracy, etc. Maybe using TensorBoard. Also, training loop with epochs, batches, and logging steps. Need to make sure the code is PyTorch-ready, so using PyTorch modules, optimizers, etc.\n\nWait, the user mentioned \"discrete"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 9.0,
+      "pass_rate": 1.0,
+      "avg_latency_sec": 60.505,
+      "p50_latency_sec": 54.611,
+      "p95_latency_sec": 84.811,
+      "total_estimated_cost": 0.000515
+    }
+  },
+  "summary_by_type": {
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 70.507
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 53.881
+      }
+    },
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 7.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 57.126
+      }
+    }
+  },
+  "recommended_routing": {
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b",
+    "coding_hard": "qwen3:8b"
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "meta": {
+    "source_report": "projects/model-router-lab/outputs/benchmark_r28.json",
+    "source_policy": "projects/model-router-lab/outputs/policy_r28.json",
+    "created_at": 1776177127,
+    "type": "autonomous-ai-engineering-control-plane",
+    "version": "r2-evolved",
+    "evolved_at": 1776178696,
+    "source_control_plane": "projects/model-router-lab/outputs/control_plane_r28.json"
+  },
+  "global_defaults": {
+    "fallback_model": "qwen3:8b",
+    "retry": {
+      "max_retries": 1,
+      "backoff_ms": 0
+    },
+    "routing_strategy": "task-type + stage-goal"
+  },
+  "workflows": {
+    "coding_hard": {
+      "task_type": "coding_hard",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 18.882,
+      "predicted_avg_score": 7.0,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "builder",
+          "agent": "coder",
+          "purpose": "Implement the change with concrete patch-level output.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "balanced",
+          "predicted_latency_sec": 11.498,
+          "predicted_score": 8.667
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 45.0,
+        "require_reviewer_for_coding": true
+      }
+    },
+    "coding_light": {
+      "task_type": "coding_light",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 7.799,
+      "predicted_avg_score": 10.0,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "builder",
+          "agent": "coder",
+          "purpose": "Apply focused code changes quickly.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "balanced",
+          "predicted_latency_sec": 11.498,
+          "predicted_score": 8.667
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 45.0,
+        "require_reviewer_for_coding": true
+      }
+    },
+    "general": {
+      "task_type": "general",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 11.498,
+      "predicted_avg_score": 8.667,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "solver",
+          "agent": "generalist",
+          "purpose": "Produce practical, directly usable output.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "balanced",
+          "predicted_latency_sec": 11.498,
+          "predicted_score": 8.667
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 45.0,
+        "require_reviewer_for_coding": false
+      }
+    },
+    "summarization": {
+      "task_type": "summarization",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 7.813,
+      "predicted_avg_score": 9.0,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "collector",
+          "agent": "analyst",
+          "purpose": "Extract main points and normalize structure.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "fast",
+          "predicted_latency_sec": 11.498,
+          "predicted_score": 8.667
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 45.0,
+        "require_reviewer_for_coding": false
+      }
+    }
+  },
+  "evolution": {
+    "iterations": [
+      {
+        "iteration": 1,
+        "changes": [
+          {
+            "task_type": "coding_hard",
+            "from_stage_count": 3,
+            "to_stage_count": 1,
+            "score": 7.0,
+            "p95_latency_sec": 18.882,
+            "feasible": true
+          },
+          {
+            "task_type": "coding_light",
+            "from_stage_count": 2,
+            "to_stage_count": 1,
+            "score": 10.0,
+            "p95_latency_sec": 7.799,
+            "feasible": true
+          },
+          {
+            "task_type": "summarization",
+            "from_stage_count": 2,
+            "to_stage_count": 1,
+            "score": 9.0,
+            "p95_latency_sec": 7.813,
+            "feasible": true
+          }
+        ]
+      },
+      {
+        "iteration": 2,
+        "changes": []
+      }
+    ],
+    "final_selection": {
+      "coding_hard": {
+        "stage_count": 1,
+        "stages": [
+          "builder"
+        ],
+        "models": [
+          "qwen3:8b"
+        ]
+      },
+      "coding_light": {
+        "stage_count": 1,
+        "stages": [
+          "builder"
+        ],
+        "models": [
+          "qwen3:8b"
+        ]
+      },
+      "general": {
+        "stage_count": 1,
+        "stages": [
+          "solver"
+        ],
+        "models": [
+          "qwen3:8b"
+        ]
+      },
+      "summarization": {
+        "stage_count": 1,
+        "stages": [
+          "collector"
+        ],
+        "models": [
+          "qwen3:8b"
+        ]
+      }
+    }
+  }
+}

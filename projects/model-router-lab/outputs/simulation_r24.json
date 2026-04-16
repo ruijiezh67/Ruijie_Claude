@@ -1,0 +1,7 @@
+{
+  "routed_tasks": 3,
+  "retried_tasks": 0,
+  "avg_score": 4.333,
+  "p95_latency_sec": 8.415,
+  "verdict": "needs-optimization"
+}

@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "dataset": "projects/model-router-lab/datasets/repo_tasks_smoke.jsonl",
+    "models": [
+      "qwen3:8b",
+      "qwen3:32b"
+    ],
+    "judge_model": "qwen3:8b",
+    "min_score": 7,
+    "sla_max_latency_sec": 45.0,
+    "deterministic_weight": 0.4,
+    "prompt_max_chars": 1200,
+    "answer_max_tokens": 320,
+    "judge_max_tokens": 120,
+    "auto_escalate": true,
+    "prices_per_1m_tokens": {
+      "qwen3:8b": 0.1,
+      "qwen3:32b": 0.45
+    },
+    "timestamp": 1776179446,
+    "model_failures": {
+      "qwen3:32b": 6
+    }
+  },
+  "tasks": [
+    {
+      "id": "repo-1",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 21.442,
+          "approx_tokens": 739,
+          "estimated_cost": 7.39e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, let's see. The user provided a Python script that's part of an MCP (Maybe Machine Control Protocol?) setup, using Ollama as a model server. The task is to propose one concrete improvement with patch-like details.\n\nLooking at the code, the main function is _call_ollama, which sends a POST request to Ollama's API. The current code handles errors by raising a RuntimeError if the URL is unreachable. But maybe there are other edge cases or improvements possible.\n\nFirst, the error handling. Right now, it catches URLError and raises a specific message. But what if the Ollama server is up, but the request fails for other reasons, like invalid JSON, or the model isn't found? The current code might not handle those cases. For example, if the server returns a 400 Bad Request, the code would catch the URLError, but maybe it's better to check the HTTP status code first.\n\nAnother thing: the code uses urllib.request, which is somewhat low-level. Maybe using a higher-level library like requests would make handling errors and responses easier. But since the code is using urllib, perhaps the user wants to stick with that. Alternatively, maybe adding a timeout for the request, but the current code already has a timeout=300.\n\nWait, the code has a timeout of 30,000 seconds? That's 500 minutes. That's way too long. Oh, wait, no, the timeout is set in the urllib.request.urlopen call. Wait, looking at"
+        },
+        {
+          "model": "qwen3:32b",
+          "score": 0,
+          "llm_score": 0,
+          "deterministic_score": 0,
+          "judge_reason": "model-call-failed",
+          "deterministic_reason": "model-call-failed",
+          "latency_sec": 0,
+          "approx_tokens": 0,
+          "estimated_cost": 0,
+          "estimated_saving_vs_baseline": 0,
+          "escalated": false,
+          "answer": "",
+          "error": "HTTP Error 500: Internal Server Error"
+        }
+      ]
+    },
+    {
+      "id": "repo-2",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 5,
+          "llm_score": 5,
+          "deterministic_score": 5,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 1; missing code block",
+          "latency_sec": 29.874,
+          "approx_tokens": 693,
+          "estimated_cost": 6.93e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "\u597d\u7684\uff0c\u6211\u73b0\u5728\u9700\u8981\u5e2e\u7528\u6237\u63d0\u51fa\u4e00\u4e2a\u5177\u4f53\u7684\u6539\u8fdb\u65b9\u6848\uff0c\u9488\u5bf9\u4ed6\u4eec\u9879\u76ee\u4e2d\u7684\u6a21\u578b\u8def\u7531\u5b9e\u9a8c\u5ba4\u3002\u9996\u5148\uff0c\u6211\u5f97\u4ed4\u7ec6\u770b\u770b\u7528\u6237\u63d0\u4f9b\u7684README\u5185\u5bb9\uff0c\u4e86\u89e3\u9879\u76ee\u7684\u73b0\u72b6\u548c\u76ee\u6807\u3002\u9879\u76ee\u7684\u4e3b\u8981\u76ee\u6807\u662f\u81ea\u52a8\u8def\u7531\u6a21\u578b\u5230\u5408\u9002\u7684\u4efb\u52a1\uff0c\u540c\u65f6\u8fdb\u884c\u8bc4\u6d4b\u3001\u8bc4\u5206\u3001\u6210\u672c\u4f30\u7b97\u548c\u751f\u6210\u62a5\u544a\u3002\n\n\u7528\u6237\u5e0c\u671b\u4e00\u4e2a\u5177\u4f53\u7684\u6539\u8fdb\uff0c\u5e26\u6709\u7c7b\u4f3c\u8865\u4e01\u7684\u7ec6\u8282\u3002\u6211\u9700\u8981\u627e\u51fa\u5f53\u524d\u6d41\u7a0b\u4e2d\u7684\u4e00\u4e2a\u75db\u70b9\uff0c\u7136\u540e\u63d0\u51fa\u4e00\u4e2a\u5177\u4f53\u7684\u89e3\u51b3\u65b9\u6848\u3002\u9996\u5148\uff0c\u6211\u5e94\u8be5\u5206\u6790\u73b0\u6709\u7684\u6b65\u9aa4\uff0c\u770b\u770b\u54ea\u91cc\u53ef\u4ee5\u4f18\u5316\u3002\n\n\u5feb\u901f\u5f00\u59cb\u90e8\u5206\u6709\u56db\u4e2a\u6b65\u9aa4\uff1a\u68c0\u67e5\u672c\u5730\u6a21\u578b\u3001\u62bd\u6837\u4efb\u52a1\u3001\u8dd1\u8bc4\u6d4b\u3001\u751f\u6210\u7b56\u7565\u3002\u8bc4\u6d4b\u9636\u6bb5\u9700\u8981\u5904\u7406\u591a\u4e2a\u6a21\u578b\uff0c\u53ef\u80fd\u6d89\u53ca\u5230\u4e0d\u540c\u7684\u53c2\u6570\u548c\u8bc4\u5206\u673a\u5236\u3002\u7528\u6237\u63d0\u5230\u53cc\u91cd\u8bc4\u5206\uff1aLLM Judge\u548c\u786e\u5b9a\u6027\u68c0\u67e5\uff0c\u8fd8\u6709\u6210\u672c\u4f30\u7b97\u548c\u53ef\u89c6\u5316\u62a5\u544a\u3002\n\n\u53ef\u80fd\u7684\u6539\u8fdb\u70b9\uff1a\u5728\u8bc4\u6d4b\u9636\u6bb5\uff0c\u5f53\u524d\u7684\u53c2\u6570\u53ef\u80fd\u4e0d\u591f\u7075\u6d3b\uff0c\u6216\u8005\u65e0\u6cd5\u52a8\u6001\u8c03\u6574\u3002\u4f8b\u5982\uff0c\u7528\u6237\u53ef\u80fd\u5e0c\u671b\u6839\u636e\u4e0d\u540c\u7684\u4efb\u52a1\u7c7b\u578b\u81ea\u52a8\u9009\u62e9\u4e0d\u540c\u7684\u6a21\u578b\u6216\u8bc4\u5206\u53c2\u6570\uff0c\u800c\u4e0d\u662f\u624b\u52a8\u6307\u5b9a\u3002\u6216\u8005\uff0c\u5728\u751f\u6210\u7b56\u7565\u65f6\uff0c\u53ef\u80fd\u9700\u8981\u66f4\u667a\u80fd\u7684\u8def\u7531\u89c4\u5219\uff0c\u6bd4\u5982\u57fa\u4e8e\u4efb\u52a1\u590d\u6742\u5ea6\u6216\u65f6\u95f4\u654f\u611f\u6027\u3002\n\n\u53e6\u4e00\u4e2a\u53ef\u80fd\u6027\u662f\uff0c\u5728\u62bd\u6837\u4efb\u52a1\u65f6\uff0c\u5f53\u524d\u7684\u62bd\u6837\u53ef\u80fd\u4e0d\u591f\u5168\u9762\uff0c\u6216\u8005\u6ca1\u6709\u8003\u8651\u4efb\u52a1\u7684\u4f18\u5148\u7ea7\u3002\u6216\u8005\uff0c\u5728\u6210\u672c\u4f30\u7b97\u65f6\uff0c\u53ef\u80fd\u6ca1\u6709\u8003\u8651\u4e0d\u540c\u6a21\u578b\u7684\u5b9e\u65f6\u4ef7\u683c\u6ce2\u52a8\uff0c\u5bfc\u81f4\u4f30\u7b97\u4e0d\u51c6\u786e\u3002\n\n\u6216\u8005\uff0c\u7528\u6237\u53ef\u80fd\u5e0c\u671b\u589e\u52a0\u5bf9\u6a21\u578b\u6027\u80fd\u7684\u5b9e\u65f6\u76d1\u63a7\uff0c\u6bd4\u5982\u5728\u8bc4\u6d4b\u8fc7\u7a0b\u4e2d\u52a8\u6001\u8c03\u6574\u6a21\u578b\u9009\u62e9\uff0c\u800c\u4e0d\u662f\u4e00\u6b21\u6027\u786e\u5b9a\u3002\u6216\u8005\uff0c\u5728\u751f\u6210\u7b56\u7565\u65f6\uff0c\u80fd\u591f\u6839\u636e\u5386\u53f2\u6570\u636e\u4f18\u5316\u8def\u7531\u89c4\u5219\uff0c\u6bd4\u5982\u673a\u5668\u5b66\u4e60\u6a21\u578b\u6765\u9884\u6d4b\u6700\u4f73\u6a21\u578b\u3002"
+        },
+        {
+          "model": "qwen3:32b",
+          "score": 0,
+          "llm_score": 0,
+          "deterministic_score": 0,
+          "judge_reason": "model-call-failed",
+          "deterministic_reason": "model-call-failed",
+          "latency_sec": 0,
+          "approx_tokens": 0,
+          "estimated_cost": 0,
+          "estimated_saving_vs_baseline": 0,
+          "escalated": false,
+          "answer": "",
+          "error": "HTTP Error 500: Internal Server Error"
+        }
+      ]
+    },
+    {
+      "id": "repo-3",
+      "type": "coding_hard",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 7,
+          "llm_score": 7,
+          "deterministic_score": 7,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing code block",
+          "latency_sec": 29.966,
+          "approx_tokens": 971,
+          "estimated_cost": 9.71e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, let's see. The user provided a Python script called routerlab.py from the model-router-lab project. They want a concrete improvement with patch-like details. The snippet shows part of the code, including workflow templates for different coding modes like coding_hard and coding_light. The coding_light workflow has a stage \"builder\" but the snippet seems cut off.\n\nFirst, I need to understand what the code does. The script probably handles routing between different models, maybe using OLLAMA_URL to interact with a model server. The DEFAULT_PRICES dictionary has model-specific costs. The WORKFLOW_TEMPLATES define different workflows for coding tasks, with stages like planner, builder, reviewer, each with agents and goals.\n\nThe user wants a specific improvement. Since the coding_light workflow is incomplete (the snippet cuts off after \"builder\"), maybe the improvement is to enhance the coding_light workflow. Alternatively, maybe there's a feature that's missing in the current code.\n\nLooking at the code, the WORKFLOW_TEMPLATES have different stages. The coding_hard workflow includes planner, builder, reviewer. The coding_light only has builder. Maybe the improvement is to add a reviewer stage to coding_light to ensure quality checks even in lighter workflows.\n\nAlternatively, maybe the builder stage in coding_light isn't generating patch-level outputs properly. The original comment says \"Implement the change with concrete patch-level output.\" So perhaps the current implementation doesn't generate patches correctly, and the improvement is to enhance that part.\n\nAnother angle: the code uses subprocess and urllib, so maybe there's an issue with handling model responses"
+        },
+        {
+          "model": "qwen3:32b",
+          "score": 0,
+          "llm_score": 0,
+          "deterministic_score": 0,
+          "judge_reason": "model-call-failed",
+          "deterministic_reason": "model-call-failed",
+          "latency_sec": 0,
+          "approx_tokens": 0,
+          "estimated_cost": 0,
+          "estimated_saving_vs_baseline": 0,
+          "escalated": false,
+          "answer": "",
+          "error": "HTTP Error 500: Internal Server Error"
+        }
+      ]
+    },
+    {
+      "id": "gen-4",
+      "type": "summarization",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 9,
+          "llm_score": 9,
+          "deterministic_score": 9,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 4; long-form coverage bonus",
+          "latency_sec": 29.371,
+          "approx_tokens": 432,
+          "estimated_cost": 4.32e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user is asking about the key technical risks when shipping a local-first AI coding product to teams. Let me start by understanding what a local-first AI coding product entails. From what I know, local-first means the core functionality runs on the user's device rather than relying heavily on cloud infrastructure. So, the main idea is to minimize cloud dependency, which can offer benefits like offline access and data privacy, but also introduces its own set of challenges.\n\nFirst, I need to think about the technical aspects. Let me break down the possible risks. Maybe starting with data synchronization. If the AI model is running locally, how does it sync with the cloud? If there's a network issue, users might lose their work. Also, ensuring that data is consistent across devices without a reliable internet connection could be tricky.\n\nThen there's the model performance. Local models might have limited resources compared to cloud-based ones. For example, if the model is too large, it could slow down the device, especially on lower-end hardware. There's also the issue of model updates. How do you push updates to the local models without disrupting the user experience? Maybe version control and rollback mechanisms are needed.\n\nSecurity and privacy are another big concern. Even though local-first reduces data transmission, there's still the risk of data breaches if the local storage isn't secure. Also, if the AI model is trained on user data, there could be privacy issues. Maybe the product needs to handle data encryption and secure storage.\n\nInteroperability is another point. If the product is local-first, how does it"
+        },
+        {
+          "model": "qwen3:32b",
+          "score": 0,
+          "llm_score": 0,
+          "deterministic_score": 0,
+          "judge_reason": "model-call-failed",
+          "deterministic_reason": "model-call-failed",
+          "latency_sec": 0,
+          "approx_tokens": 0,
+          "estimated_cost": 0,
+          "estimated_saving_vs_baseline": 0,
+          "escalated": false,
+          "answer": "",
+          "error": "HTTP Error 500: Internal Server Error"
+        }
+      ]
+    },
+    {
+      "id": "gen-5",
+      "type": "general",
+      "runs": [
+        {
+          "model": "qwen3:8b",
+          "score": 10,
+          "llm_score": 10,
+          "deterministic_score": 10,
+          "judge_reason": "Judge output parsing failed",
+          "deterministic_reason": "missing expected keywords: 2; long-form coverage bonus",
+          "latency_sec": 32.518,
+          "approx_tokens": 419,
+          "estimated_cost": 4.19e-05,
+          "estimated_saving_vs_baseline": 0.0,
+          "escalated": false,
+          "answer": "Okay, the user wants a 7-day plan to get 100 GitHub stars for their devtool. Let me think about how to approach this. First, I need to break down the steps each day, making sure they're actionable and realistic. \n\nStarting with Day 1, they probably need to set up the repository properly. That means a clear README, good documentation, maybe a demo. Also, setting up the GitHub page and maybe some social media links. They should also start engaging with the community by asking for feedback. Maybe even create a GitHub Discussion to gather early input.\n\nOn Day 2, they should focus on marketing. Writing a blog post or tweetstorm could help. Maybe reach out to dev communities like Reddit or Discord. Collaborating with influencers or open-source projects might bring more visibility. They should also start tracking metrics using tools like GitHub Insights or third-party analytics.\n\nDay 3 could be about building a community. Creating a Discord or Slack group for users to interact. Maybe a GitHub repo with a \"contributing\" guide to encourage participation. They should also start responding to issues and pull requests promptly to build trust.\n\nDay 4 might involve leveraging social media more. Posting updates, tutorials, or success stories. Engaging with other developers by commenting on their repositories or participating in Twitter threads. Maybe even a giveaway or contest to incentivize stars.\n\nOn Day 5, they should focus on partnerships. Reaching out to open-source projects that might benefit from their tool. Maybe a collaboration or a mention in their documentation. Also, creating a roadmap"
+        },
+        {
+          "model": "qwen3:32b",
+          "score": 0,
+          "llm_score": 0,
+          "deterministic_score": 0,
+          "judge_reason": "model-call-failed",
+          "deterministic_reason": "model-call-failed",
+          "latency_sec": 0,
+          "approx_tokens": 0,
+          "estimated_cost": 0,
+          "estimated_saving_vs_baseline": 0,
+          "escalated": false,
+          "answer": "",
+          "error": "HTTP Error 500: Internal Server Error"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "qwen3:8b": {
+      "avg_score": 7.6,
+      "pass_rate": 0.8,
+      "avg_latency_sec": 28.634,
+      "p50_latency_sec": 29.874,
+      "p95_latency_sec": 32.518,
+      "total_estimated_cost": 0.000325
+    }
+  },
+  "summary_by_type": {
+    "coding_hard": {
+      "qwen3:8b": {
+        "avg_score": 6.333,
+        "pass_rate": 0.667,
+        "avg_latency_sec": 27.094
+      }
+    },
+    "summarization": {
+      "qwen3:8b": {
+        "avg_score": 9.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 29.371
+      }
+    },
+    "general": {
+      "qwen3:8b": {
+        "avg_score": 10.0,
+        "pass_rate": 1.0,
+        "avg_latency_sec": 32.518
+      }
+    }
+  },
+  "recommended_routing": {
+    "coding_hard": "qwen3:8b",
+    "summarization": "qwen3:8b",
+    "general": "qwen3:8b"
+  }
+}

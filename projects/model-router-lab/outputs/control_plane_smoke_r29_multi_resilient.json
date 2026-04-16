@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "source_report": "projects/model-router-lab/outputs/benchmark_smoke_r29_multi_resilient.json",
+    "source_policy": "projects/model-router-lab/outputs/policy_smoke_r29_multi_resilient.json",
+    "created_at": 1776179702,
+    "type": "autonomous-ai-engineering-control-plane",
+    "version": "r1"
+  },
+  "global_defaults": {
+    "fallback_model": "qwen3:8b",
+    "retry": {
+      "max_retries": 1,
+      "backoff_ms": 0
+    },
+    "routing_strategy": "task-type + stage-goal"
+  },
+  "workflows": {
+    "coding_hard": {
+      "task_type": "coding_hard",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 85.902,
+      "predicted_avg_score": 7.6,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "planner",
+          "agent": "architect",
+          "purpose": "Design approach and identify edge cases before coding.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "quality",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        },
+        {
+          "name": "builder",
+          "agent": "coder",
+          "purpose": "Implement the change with concrete patch-level output.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "balanced",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        },
+        {
+          "name": "reviewer",
+          "agent": "reviewer",
+          "purpose": "Check correctness, regressions, and security risks.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "quality",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 135.0,
+        "require_reviewer_for_coding": true
+      }
+    },
+    "coding_light": {
+      "task_type": "coding_light",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 57.268,
+      "predicted_avg_score": 7.6,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "builder",
+          "agent": "coder",
+          "purpose": "Apply focused code changes quickly.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "balanced",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        },
+        {
+          "name": "reviewer",
+          "agent": "reviewer",
+          "purpose": "Confirm patch quality before merge.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "quality",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 90.0,
+        "require_reviewer_for_coding": true
+      }
+    },
+    "general": {
+      "task_type": "general",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 28.634,
+      "predicted_avg_score": 7.6,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "solver",
+          "agent": "generalist",
+          "purpose": "Produce practical, directly usable output.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "balanced",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 45.0,
+        "require_reviewer_for_coding": false
+      }
+    },
+    "summarization": {
+      "task_type": "summarization",
+      "default_model": "qwen3:8b",
+      "workflow_mode": "multi-agent",
+      "predicted_total_latency_sec": 57.268,
+      "predicted_avg_score": 7.6,
+      "escalation_trigger": "final_quality_gate_fail",
+      "stages": [
+        {
+          "name": "collector",
+          "agent": "analyst",
+          "purpose": "Extract main points and normalize structure.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "fast",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        },
+        {
+          "name": "editor",
+          "agent": "editor",
+          "purpose": "Refine for clarity and decision readiness.",
+          "model": "qwen3:8b",
+          "fallback_model": "qwen3:8b",
+          "goal": "quality",
+          "predicted_latency_sec": 28.634,
+          "predicted_score": 7.6
+        }
+      ],
+      "quality_gates": {
+        "min_stage_score": 7.0,
+        "max_total_latency_sec": 90.0,
+        "require_reviewer_for_coding": false
+      }
+    }
+  }
+}

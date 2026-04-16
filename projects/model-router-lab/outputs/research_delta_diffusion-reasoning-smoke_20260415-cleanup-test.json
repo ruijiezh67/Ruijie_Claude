@@ -1,0 +1,49 @@
+{
+  "topic": "Diffusion reasoning smoke",
+  "topic_slug": "diffusion-reasoning-smoke",
+  "current_run": {
+    "topic": "Diffusion reasoning smoke",
+    "topic_slug": "diffusion-reasoning-smoke",
+    "run_id": "20260415-cleanup-test",
+    "timestamp": "2026-04-15T03:26:44Z",
+    "files": {
+      "dataset": "projects/model-router-lab/datasets/research_diffusion-reasoning-smoke_20260415-cleanup-test.jsonl",
+      "benchmark": "projects/model-router-lab/outputs/benchmark_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+      "policy": "projects/model-router-lab/outputs/policy_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+      "simulation": "projects/model-router-lab/outputs/simulation_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+      "control_plane": "projects/model-router-lab/outputs/control_plane_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+      "control_plane_evolved": "projects/model-router-lab/outputs/control_plane_evolved_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+      "control_plane_simulation": "projects/model-router-lab/outputs/control_plane_evolved_simulation_research_diffusion-reasoning-smoke_20260415-cleanup-test.json",
+      "report": "projects/model-router-lab/outputs/report_research_diffusion-reasoning-smoke_20260415-cleanup-test.html"
+    },
+    "metrics": {
+      "simulation": {
+        "avg_score": 9.25,
+        "p95_latency_sec": 18.12,
+        "verdict": "good"
+      },
+      "control_plane": {
+        "avg_score": 9.25,
+        "p95_latency_sec": 18.12,
+        "verdict": "innovative-ready"
+      }
+    }
+  },
+  "has_previous": true,
+  "previous_run": {
+    "run_id": "20260415-smoke-v2",
+    "timestamp": "2026-04-15T02:42:02Z"
+  },
+  "changes": {
+    "simulation": {
+      "avg_score_delta": 0.25,
+      "p95_latency_sec_delta": -38.293,
+      "verdict_changed": true
+    },
+    "control_plane": {
+      "avg_score_delta": 0.25,
+      "p95_latency_sec_delta": -38.293,
+      "verdict_changed": true
+    }
+  }
+}

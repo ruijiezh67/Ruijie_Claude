@@ -1,0 +1,105 @@
+{
+  "query": "all:discrete diffusion reasoning",
+  "max_results": 8,
+  "fetched": 8,
+  "papers": [
+    {
+      "id": "http://arxiv.org/abs/2504.16021v1",
+      "title": "Navigating the State of Cognitive Flow: Context-Aware AI Interventions for Effective Reasoning Support",
+      "summary": "Flow theory describes an optimal cognitive state where individuals experience deep focus and intrinsic motivation when a task's difficulty aligns with their skill level. In AI-augmented reasoning, interventions that disrupt the state of cognitive flow can hinder rather than enhance decision-making. This paper proposes a context-aware cognitive augmentation framework that adapts interventions based on three key contextual factors: type, timing, and scale. By leveraging multimodal behavioral cues (e.g., gaze behavior, typing hesitation, interaction speed), AI can dynamically adjust cognitive support to maintain or restore flow. We introduce the concept of cognitive flow, an extension of flow theory in AI-augmented reasoning, where interventions are personalized, adaptive, and minimally intrusive. By shifting from static interventions to context-aware augmentation, our approach ensures that AI systems support deep engagement in complex decision-making and reasoning without disrupting cognitive immersion.",
+      "published": "2025-04-22T16:35:39Z",
+      "authors": [
+        "Dinithi Dissanayake",
+        "Suranga Nanayakkara"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/2402.03701v2",
+      "title": "Unified Discrete Diffusion for Categorical Data",
+      "summary": "Discrete diffusion models have seen a surge of attention with applications on naturally discrete data such as language and graphs. Although discrete-time discrete diffusion has been established for a while, only recently Campbell et al. (2022) introduced the first framework for continuous-time discrete diffusion. However, their training and sampling processes differ significantly from the discrete-time version, necessitating nontrivial approximations for tractability. In this paper, we first present a series of mathematical simplifications of the variational lower bound that enable more accurate and easy-to-optimize training for discrete diffusion. In addition, we derive a simple formulation for backward denoising that enables exact and accelerated sampling, and importantly, an elegant unification of discrete-time and continuous-time discrete diffusion. Thanks to simpler analytical formulations, both forward and now also backward probabilities can flexibly accommodate any noise distribution, including different noise distributions for multi-element objects. Experiments show that our proposed USD3 (for Unified Simplified Discrete Denoising Diffusion) outperform all SOTA baselines on established datasets. We open-source our unified code at https://github.com/LingxiaoShawn/USD3.",
+      "published": "2024-02-06T04:42:36Z",
+      "authors": [
+        "Lingxiao Zhao",
+        "Xueying Ding",
+        "Lijun Yu",
+        "Leman Akoglu"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/2302.05737v3",
+      "title": "A Reparameterized Discrete Diffusion Model for Text Generation",
+      "summary": "This work studies discrete diffusion probabilistic models with applications to natural language generation. We derive an alternative yet equivalent formulation of the sampling from discrete diffusion processes and leverage this insight to develop a family of reparameterized discrete diffusion models. The derived generic framework is highly flexible, offers a fresh perspective of the generation process in discrete diffusion models, and features more effective training and decoding techniques. We conduct extensive experiments to evaluate the text generation capability of our model, demonstrating significant improvements over existing diffusion models.",
+      "published": "2023-02-11T16:26:57Z",
+      "authors": [
+        "Lin Zheng",
+        "Jianbo Yuan",
+        "Lei Yu",
+        "Lingpeng Kong"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/2602.05961v1",
+      "title": "Discrete diffusion samplers and bridges: Off-policy algorithms and applications in latent spaces",
+      "summary": "Sampling from a distribution $p(x) \\propto e^{-\\mathcal{E}(x)}$ known up to a normalising constant is an important and challenging problem in statistics. Recent years have seen the rise of a new family of amortised sampling algorithms, commonly referred to as diffusion samplers, that enable fast and efficient sampling from an unnormalised density. Such algorithms have been widely studied for continuous-space sampling tasks; however, their application to problems in discrete space remains largely unexplored. Although some progress has been made in this area, discrete diffusion samplers do not take full advantage of ideas commonly used for continuous-space sampling. In this paper, we propose to bridge this gap by introducing off-policy training techniques for discrete diffusion samplers. We show that these techniques improve the performance of discrete samplers on both established and new synthetic benchmarks. Next, we generalise discrete diffusion samplers to the task of bridging between two arbitrary distributions, introducing data-to-energy Schr\u00f6dinger bridge training for the discrete domain for the first time. Lastly, we showcase the application of the proposed diffusion samplers to data-free posterior sampling in the discrete latent spaces of image generative models.",
+      "published": "2026-02-05T18:16:57Z",
+      "authors": [
+        "Arran Carter",
+        "Sanghyeok Choi",
+        "Kirill Tamogashev",
+        "V\u00edctor Elvira",
+        "Nikolay Malkin"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/2310.16834v3",
+      "title": "Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+      "summary": "Despite their groundbreaking performance for many generative modeling tasks, diffusion models have fallen short on discrete data domains such as natural language. Crucially, standard diffusion models rely on the well-established theory of score matching, but efforts to generalize this to discrete structures have not yielded the same empirical gains. In this work, we bridge this gap by proposing score entropy, a novel loss that naturally extends score matching to discrete spaces, integrates seamlessly to build discrete diffusion models, and significantly boosts performance. Experimentally, we test our Score Entropy Discrete Diffusion models (SEDD) on standard language modeling tasks. For comparable model sizes, SEDD beats existing language diffusion paradigms (reducing perplexity by $25$-$75$\\%) and is competitive with autoregressive models, in particular outperforming GPT-2. Furthermore, compared to autoregressive mdoels, SEDD generates faithful text without requiring distribution annealing techniques like temperature scaling (around $6$-$8\\times$ better generative perplexity than un-annealed GPT-2), can trade compute and quality (similar quality with $32\\times$ fewer network evaluations), and enables controllable infilling (matching nucleus sampling quality while enabling other strategies besides left to right prompting).",
+      "published": "2023-10-25T17:59:12Z",
+      "authors": [
+        "Aaron Lou",
+        "Chenlin Meng",
+        "Stefano Ermon"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/2412.10193v3",
+      "title": "Simple Guidance Mechanisms for Discrete Diffusion Models",
+      "summary": "Diffusion models for continuous data gained widespread adoption owing to their high quality generation and control mechanisms. However, controllable diffusion on discrete data faces challenges given that continuous guidance methods do not directly apply to discrete diffusion. Here, we provide a straightforward derivation of classifier-free and classifier-based guidance for discrete diffusion, as well as a new class of diffusion models that leverage uniform noise and that are more guidable because they can continuously edit their outputs. We improve the quality of these models with a novel continuous-time variational lower bound that yields state-of-the-art performance, especially in settings involving guidance or fast generation. Empirically, we demonstrate that our guidance mechanisms combined with uniform noise diffusion improve controllable generation relative to autoregressive and diffusion baselines on several discrete data domains, including genomic sequences, small molecule design, and discretized image generation.",
+      "published": "2024-12-13T15:08:30Z",
+      "authors": [
+        "Yair Schiff",
+        "Subham Sekhar Sahoo",
+        "Hao Phung",
+        "Guanghan Wang",
+        "Sam Boshar",
+        "Hugo Dalla-torre",
+        "Bernardo P. de Almeida",
+        "Alexander Rush",
+        "Thomas Pierrot",
+        "Volodymyr Kuleshov"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/2601.03559v1",
+      "title": "DiffCoT: Diffusion-styled Chain-of-Thought Reasoning in LLMs",
+      "summary": "Chain-of-Thought (CoT) reasoning improves multi-step mathematical problem solving in large language models but remains vulnerable to exposure bias and error accumulation, as early mistakes propagate irreversibly through autoregressive decoding. In this work, we propose DiffCoT, a diffusion-styled CoT framework that reformulates CoT reasoning as an iterative denoising process. DiffCoT integrates diffusion principles at the reasoning-step level via a sliding-window mechanism, enabling unified generation and retrospective correction of intermediate steps while preserving token-level autoregression. To maintain causal consistency, we further introduce a causal diffusion noise schedule that respects the temporal structure of reasoning chains. Extensive experiments on three multi-step CoT reasoning benchmarks across diverse model backbones demonstrate that DiffCoT consistently outperforms existing CoT preference optimization methods, yielding improved robustness and error-correction capability in CoT reasoning.",
+      "published": "2026-01-07T03:58:42Z",
+      "authors": [
+        "Shidong Cao",
+        "Hongzhan Lin",
+        "Yuxuan Gu",
+        "Ziyang Luo",
+        "Jing Ma"
+      ]
+    },
+    {
+      "id": "http://arxiv.org/abs/1706.05261v1",
+      "title": "From Propositional Logic to Plausible Reasoning: A Uniqueness Theorem",
+      "summary": "We consider the question of extending propositional logic to a logic of plausible reasoning, and posit four requirements that any such extension should satisfy. Each is a requirement that some property of classical propositional logic be preserved in the extended logic; as such, the requirements are simpler and less problematic than those used in Cox's Theorem and its variants. As with Cox's Theorem, our requirements imply that the extended logic must be isomorphic to (finite-set) probability theory. We also obtain specific numerical values for the probabilities, recovering the classical definition of probability as a theorem, with truth assignments that satisfy the premise playing the role of the \"possible cases.\"",
+      "published": "2017-06-16T13:13:45Z",
+      "authors": [
+        "Kevin S. Van Horn"
+      ]
+    }
+  ]
+}

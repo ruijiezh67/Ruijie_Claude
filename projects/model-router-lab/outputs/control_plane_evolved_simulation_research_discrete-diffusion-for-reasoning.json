@@ -1,0 +1,7 @@
+{
+  "routed_tasks": 6,
+  "escalation_candidates": 0,
+  "predicted_avg_score": 9.0,
+  "predicted_p95_latency_sec": 84.811,
+  "verdict": "needs-more-policy-evolution"
+}

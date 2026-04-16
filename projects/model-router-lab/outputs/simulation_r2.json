@@ -1,0 +1,6 @@
+{
+  "routed_tasks": 3,
+  "retried_tasks": 0,
+  "avg_score": 2.0,
+  "p95_latency_sec": 17.115
+}
